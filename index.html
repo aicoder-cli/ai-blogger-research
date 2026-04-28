@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 博主调研 · 2025-2026</title>
+<style>
+/* ========== Reset & Base ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0A0A0A;
+  --bg-elevated: #0C0C0C;
+  --text-primary: #E5E5E5;
+  --text-secondary: #888888;
+  --text-dim: #555555;
+  --accent: #FFFFFF;
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.15);
+  --card-bg: rgba(255,255,255,0.03);
+  --card-hover: rgba(255,255,255,0.06);
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+  --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+  --xiaohongshu: #FF2442;
+  --douyin: #FE2C55;
+  --zhihu: #0066FF;
+  --shipinhao: #07C160;
+  --gongzhonghao: #07C160;
+  --nav-height: 64px;
+  --max-width: 1200px;
+  --radius: 12px;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  overflow-x: hidden;
+}
+
+/* ========== Scrollbar ========== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* ========== Navigation ========== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.nav-left {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.nav-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+
+.nav-subtitle {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+
+.nav-platforms {
+  display: flex;
+  gap: 6px;
+}
+
+.nav-platform-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.nav-platform-btn:hover {
+  color: var(--text-primary);
+  background: var(--card-bg);
+  border-color: var(--border);
+}
+
+.nav-platform-btn.active {
+  color: var(--text-primary);
+  background: var(--card-hover);
+  border-color: var(--border-hover);
+}
+
+.nav-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ========== Main Content ========== */
+.main {
+  padding-top: var(--nav-height);
+  min-height: 100vh;
+}
+
+/* ========== Hero Section ========== */
+.hero {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 80px 48px 60px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.hero.hidden {
+  display: none;
+}
+
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  margin-bottom: 32px;
+}
+
+.hero-label-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero h1 {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  margin-bottom: 20px;
+  max-width: 800px;
+}
+
+.hero-desc {
+  font-size: 17px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 600px;
+  margin-bottom: 40px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 72px;
+}
+
+.hero-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.hero-stat-value {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.hero-stat-label {
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.hero-stat-sep {
+  color: var(--text-dim);
+  font-size: 20px;
+  align-self: center;
+  opacity: 0.3;
+}
+
+/* ========== Platform Cards ========== */
+.cards-section {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 48px 80px;
+}
+
+.cards-section-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.cards-grid .card:nth-child(4),
+.cards-grid .card:nth-child(5) {
+  /* Bottom row: 2 cards centered */
+}
+
+.cards-row-bottom {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: calc((100% - 32px) * 2 / 3 + 16px);
+  margin: 16px auto 0;
+}
+
+.card {
+  position: relative;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
+}
+
+.card:hover {
+  background: var(--card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.card-platform {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.card-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.card-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.05);
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+.card-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.card-action {
+  font-size: 13px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--transition);
+}
+
+.card:hover .card-action {
+  color: var(--text-primary);
+}
+
+.card-action-arrow {
+  transition: transform var(--transition);
+}
+
+.card:hover .card-action-arrow {
+  transform: translateX(3px);
+}
+
+/* ========== Comparison Section ========== */
+.comparison {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 48px 100px;
+}
+
+.comparison-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.comparison-table th {
+  color: var(--text-dim);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  width: 140px;
+  vertical-align: top;
+}
+
+.comparison-table th.platform-header {
+  text-align: center;
+  width: auto;
+  padding-bottom: 12px;
+}
+
+.comparison-table th .th-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.comparison-table td {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  vertical-align: top;
+}
+
+.comparison-table td:first-child {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.comparison-table tr:last-child th,
+.comparison-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* ========== Footer ========== */
+.footer {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 40px 48px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-text {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+.footer-date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* ========== Iframe View ========== */
+.iframe-view {
+  display: none;
+  position: fixed;
+  top: var(--nav-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg);
+  z-index: 100;
+}
+
+.iframe-view.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.iframe-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 48px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,10,0.9);
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.iframe-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.iframe-back:hover {
+  color: var(--text-primary);
+  background: var(--card-bg);
+  border-color: var(--border-hover);
+}
+
+.iframe-platform-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iframe-container {
+  flex: 1;
+  overflow: hidden;
+}
+
+.iframe-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ========== Staggered Fade-in ========== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in:nth-child(1) { animation-delay: 0.05s; }
+.fade-in:nth-child(2) { animation-delay: 0.1s; }
+.fade-in:nth-child(3) { animation-delay: 0.15s; }
+.fade-in:nth-child(4) { animation-delay: 0.2s; }
+.fade-in:nth-child(5) { animation-delay: 0.25s; }
+
+.delay-1 { animation-delay: 0.05s !important; }
+.delay-2 { animation-delay: 0.1s !important; }
+.delay-3 { animation-delay: 0.15s !important; }
+.delay-4 { animation-delay: 0.2s !important; }
+.delay-5 { animation-delay: 0.25s !important; }
+.delay-6 { animation-delay: 0.3s !important; }
+.delay-7 { animation-delay: 0.35s !important; }
+.delay-8 { animation-delay: 0.4s !important; }
+
+/* ========== Responsive ========== */
+@media (max-width: 1024px) {
+  .nav { padding: 0 24px; }
+  .hero { padding: 60px 24px 40px; }
+  .hero h1 { font-size: 36px; }
+  .cards-section, .comparison, .footer { padding-left: 24px; padding-right: 24px; }
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+  .cards-row-bottom { max-width: 100%; }
+  .comparison-table { font-size: 13px; }
+  .comparison-table th, .comparison-table td { padding: 12px 14px; }
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 0 16px; flex-wrap: wrap; height: auto; padding-top: 12px; padding-bottom: 12px; gap: 8px; }
+  .nav-platforms { flex-wrap: wrap; gap: 4px; }
+  .nav-platform-btn { padding: 4px 10px; font-size: 12px; }
+  .main { padding-top: 100px; }
+  .hero { padding: 40px 16px 30px; }
+  .hero h1 { font-size: 28px; }
+  .hero-desc { font-size: 15px; }
+  .hero-stats { flex-wrap: wrap; gap: 16px 24px; }
+  .hero-stat-value { font-size: 22px; }
+  .cards-section, .comparison, .footer { padding-left: 16px; padding-right: 16px; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .cards-row-bottom { max-width: 100%; grid-template-columns: 1fr; margin-top: 16px; }
+  .comparison-table { display: block; overflow-x: auto; }
+  .iframe-toolbar { padding: 12px 16px; }
+  .footer { flex-direction: column; gap: 8px; text-align: center; }
+}
+/* ========== Disclaimer Banner ========== */
+.disclaimer-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: var(--max-width);
+  margin: calc(var(--nav-height) + 32px) auto 0;
+  padding: 14px 20px;
+  background: rgba(255, 165, 0, 0.06);
+  border: 1px solid rgba(255, 165, 0, 0.2);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #ccc;
+}
+.disclaimer-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 165, 0, 0.15);
+  color: #f0a030;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: var(--font-mono);
+}
+.disclaimer-text {
+  flex: 1;
+}
+
+/* ========== Footer Enhancement ========== */
+.footer {
+  border-top: 1px solid var(--border);
+  padding-top: 32px !important;
+}
+.footer-disclaimer {
+  max-width: var(--max-width);
+  margin: 0 auto 24px;
+  padding: 16px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-dim);
+  text-align: center;
+}
+.footer-disclaimer strong {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .disclaimer-banner {
+    margin: calc(var(--nav-height) + 16px) 16px 0;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== Navigation ========== -->
+<nav class="nav">
+  <div class="nav-left" onclick="goHome()">
+    <span class="nav-title">AI 博主调研</span>
+    <span class="nav-subtitle">2025-2026 &middot; 五大平台 &middot; 100位头部创作者</span>
+  </div>
+  <div class="nav-platforms">
+    <button class="nav-platform-btn" data-platform="xiaohongshu" onclick="showPlatform('xiaohongshu')">
+      <span class="nav-dot" style="background:var(--xiaohongshu)"></span>小红书
+    </button>
+    <button class="nav-platform-btn" data-platform="douyin" onclick="showPlatform('douyin')">
+      <span class="nav-dot" style="background:var(--douyin)"></span>抖音
+    </button>
+    <button class="nav-platform-btn" data-platform="zhihu" onclick="showPlatform('zhihu')">
+      <span class="nav-dot" style="background:var(--zhihu)"></span>知乎
+    </button>
+    <button class="nav-platform-btn" data-platform="shipinhao" onclick="showPlatform('shipinhao')">
+      <span class="nav-dot" style="background:var(--shipinhao)"></span>视频号
+    </button>
+    <button class="nav-platform-btn" data-platform="gongzhonghao" onclick="showPlatform('gongzhonghao')">
+      <span class="nav-dot" style="background:var(--gongzhonghao)"></span>公众号
+    </button>
+  </div>
+</nav>
+
+<!-- ========== Main Content ========== -->
+<div class="main">
+
+  <!-- Disclaimer Banner -->
+  <div class="disclaimer-banner fade-in">
+    <span class="disclaimer-icon">!</span>
+    <span class="disclaimer-text">本报告由 AI 搜集公开信息自动生成，数据仅供参考，不构成任何建议或背书。博主排名、粉丝量级、变现方式等信息均基于公开渠道整理，可能存在滞后或偏差，请以各平台实际数据为准。</span>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="hero" id="heroSection">
+    <div class="hero-label fade-in delay-1">
+      <span class="hero-label-dot"></span>
+      调研报告 &middot; 2026.04
+    </div>
+
+    <h1 class="fade-in delay-2">五大平台 AI 领域头部博主全景分析</h1>
+
+    <p class="hero-desc fade-in delay-3">
+      覆盖公众号、小红书、抖音、知乎、视频号，共计 100 位头部 AI 博主的深度调研。从内容风格到变现模式，全方位拆解 AI 创作者生态。
+    </p>
+
+    <div class="hero-stats fade-in delay-4">
+      <div class="hero-stat">
+        <span class="hero-stat-value">5</span>
+        <span class="hero-stat-label">个平台</span>
+      </div>
+      <span class="hero-stat-sep">|</span>
+      <div class="hero-stat">
+        <span class="hero-stat-value">100</span>
+        <span class="hero-stat-label">位博主</span>
+      </div>
+      <span class="hero-stat-sep">|</span>
+      <div class="hero-stat">
+        <span class="hero-stat-value">6</span>
+        <span class="hero-stat-label">大变现模式</span>
+      </div>
+      <span class="hero-stat-sep">|</span>
+      <div class="hero-stat">
+        <span class="hero-stat-value">3</span>
+        <span class="hero-stat-label">种内容风格</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Platform Cards -->
+  <div class="cards-section" id="cardsSection">
+    <div class="cards-section-title fade-in delay-5">平台报告</div>
+
+    <div class="cards-grid">
+      <div class="card fade-in delay-5" onclick="showPlatform('xiaohongshu')">
+        <div>
+          <div class="card-header">
+            <div class="card-platform">
+              <span class="card-dot" style="background:var(--xiaohongshu)"></span>
+              <span class="card-name">小红书</span>
+            </div>
+            <span class="card-count">20 位博主</span>
+          </div>
+          <p class="card-desc">以图文笔记和短视频为主，AI 工具测评与教程类内容占主导，女性用户付费转化率高。</p>
+        </div>
+        <div class="card-action">
+          查看报告 <span class="card-action-arrow">&rarr;</span>
+        </div>
+      </div>
+
+      <div class="card fade-in delay-6" onclick="showPlatform('douyin')">
+        <div>
+          <div class="card-header">
+            <div class="card-platform">
+              <span class="card-dot" style="background:var(--douyin)"></span>
+              <span class="card-name">抖音</span>
+            </div>
+            <span class="card-count">20 位博主</span>
+          </div>
+          <p class="card-desc">短视频形式为主，AI 应用场景展示和科普类内容爆发力强，流量变现路径成熟。</p>
+        </div>
+        <div class="card-action">
+          查看报告 <span class="card-action-arrow">&rarr;</span>
+        </div>
+      </div>
+
+      <div class="card fade-in delay-7" onclick="showPlatform('zhihu')">
+        <div>
+          <div class="card-header">
+            <div class="card-platform">
+              <span class="card-dot" style="background:var(--zhihu)"></span>
+              <span class="card-name">知乎</span>
+            </div>
+            <span class="card-count">20 位博主</span>
+          </div>
+          <p class="card-desc">深度长文与技术解析为主，用户群体学历高、付费意愿强，知识付费转化率领先。</p>
+        </div>
+        <div class="card-action">
+          查看报告 <span class="card-action-arrow">&rarr;</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cards-row-bottom">
+      <div class="card fade-in delay-7" onclick="showPlatform('shipinhao')">
+        <div>
+          <div class="card-header">
+            <div class="card-platform">
+              <span class="card-dot" style="background:var(--shipinhao)"></span>
+              <span class="card-name">视频号</span>
+            </div>
+            <span class="card-count">20 位博主</span>
+          </div>
+          <p class="card-desc">依托微信生态，AI 赛道增长迅速，私域流量沉淀与直播带货潜力大。</p>
+        </div>
+        <div class="card-action">
+          查看报告 <span class="card-action-arrow">&rarr;</span>
+        </div>
+      </div>
+
+      <div class="card fade-in delay-8" onclick="showPlatform('gongzhonghao')">
+        <div>
+          <div class="card-header">
+            <div class="card-platform">
+              <span class="card-dot" style="background:var(--gongzhonghao)"></span>
+              <span class="card-name">公众号</span>
+            </div>
+            <span class="card-count">20 位博主</span>
+          </div>
+          <p class="card-desc">深度内容与行业分析为主，读者粘性高，广告与知识付费为主要变现手段。</p>
+        </div>
+        <div class="card-action">
+          查看报告 <span class="card-action-arrow">&rarr;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Section -->
+  <div class="comparison" id="comparisonSection">
+    <div class="comparison-title fade-in delay-6">平台对比速览</div>
+
+    <table class="comparison-table fade-in delay-7">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="platform-header"><span class="th-dot" style="background:var(--xiaohongshu)"></span>小红书</th>
+          <th class="platform-header"><span class="th-dot" style="background:var(--douyin)"></span>抖音</th>
+          <th class="platform-header"><span class="th-dot" style="background:var(--zhihu)"></span>知乎</th>
+          <th class="platform-header"><span class="th-dot" style="background:var(--shipinhao)"></span>视频号</th>
+          <th class="platform-header"><span class="th-dot" style="background:var(--gongzhonghao)"></span>公众号</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>核心变现方式</td>
+          <td>品牌合作、带货佣金</td>
+          <td>直播带货、星图广告</td>
+          <td>知识付费、盐选专栏</td>
+          <td>直播带货、私域转化</td>
+          <td>广告投放、付费课程</td>
+        </tr>
+        <tr>
+          <td>内容特点</td>
+          <td>图文笔记、工具测评</td>
+          <td>短视频、场景演示</td>
+          <td>深度长文、技术解析</td>
+          <td>短视频、直播切片</td>
+          <td>深度分析、行业报告</td>
+        </tr>
+        <tr>
+          <td>用户画像</td>
+          <td>18-35岁女性为主</td>
+          <td>泛人群、下沉市场</td>
+          <td>高学历、一二线城市</td>
+          <td>30-50岁、高净值</td>
+          <td>职场人群、决策者</td>
+        </tr>
+        <tr>
+          <td>付费意愿</td>
+          <td>中等偏上</td>
+          <td>中等</td>
+          <td>较高</td>
+          <td>较高</td>
+          <td>高</td>
+        </tr>
+        <tr>
+          <td>商业价值</td>
+          <td>品牌种草能力强</td>
+          <td>流量爆发力强</td>
+          <td>专业背书价值高</td>
+          <td>私域沉淀潜力大</td>
+          <td>深度影响力强</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer Disclaimer -->
+  <div class="footer-disclaimer">
+    <strong>免责声明：</strong>本报告由 AI 搜集公开信息自动生成，所有博主排名、粉丝数据、变现方式及影响力评估均基于公开渠道信息整理，可能存在滞后或偏差，不构成任何投资、合作或背书建议。数据仅供参考，请以各平台实际数据为准。
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-text">
+      本报告由 AI 搜集公开信息自动生成 &middot; 仅供研究参考，不构成任何建议<br>
+      调研范围：2025.01 &ndash; 2026.04
+    </div>
+    <div class="footer-date">2026.04</div>
+  </div>
+
+</div>
+
+<!-- ========== Iframe View ========== -->
+<div class="iframe-view" id="iframeView">
+  <div class="iframe-toolbar">
+    <button class="iframe-back" onclick="goHome()">
+      &larr; 返回总览
+    </button>
+    <div class="iframe-platform-name" id="iframePlatformName">
+      <span class="nav-dot" id="iframePlatformDot"></span>
+      <span id="iframePlatformText"></span>
+    </div>
+  </div>
+  <div class="iframe-container">
+    <iframe id="reportIframe" title="平台报告"></iframe>
+  </div>
+</div>
+
+<!-- ========== JavaScript ========== -->
+<script>
+(function() {
+  'use strict';
+
+  var platformMap = {
+    xiaohongshu: { name: '小红书', color: '#FF2442', file: 'xiaohongshu.html' },
+    douyin:      { name: '抖音',   color: '#FE2C55', file: 'douyin.html' },
+    zhihu:       { name: '知乎',   color: '#0066FF', file: 'zhihu.html' },
+    shipinhao:   { name: '视频号', color: '#07C160', file: 'shipinhao.html' },
+    gongzhonghao:{ name: '公众号', color: '#07C160', file: 'gongzhonghao.html' }
+  };
+
+  var heroSection = document.getElementById('heroSection');
+  var cardsSection = document.getElementById('cardsSection');
+  var comparisonSection = document.getElementById('comparisonSection');
+  var iframeView = document.getElementById('iframeView');
+  var reportIframe = document.getElementById('reportIframe');
+  var iframePlatformDot = document.getElementById('iframePlatformDot');
+  var iframePlatformText = document.getElementById('iframePlatformText');
+  var navBtns = document.querySelectorAll('.nav-platform-btn');
+
+  function showPlatform(key) {
+    var info = platformMap[key];
+    if (!info) return;
+
+    // Update hash
+    window.location.hash = key;
+
+    // Hide hero, show iframe
+    heroSection.style.display = 'none';
+    cardsSection.style.display = 'none';
+    comparisonSection.style.display = 'none';
+    document.querySelector('.footer').style.display = 'none';
+
+    // Update iframe
+    reportIframe.src = info.file;
+    iframePlatformDot.style.background = info.color;
+    iframePlatformText.textContent = info.name;
+
+    // Show iframe view
+    iframeView.classList.add('active');
+
+    // Update nav buttons
+    navBtns.forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.platform === key);
+    });
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+  }
+
+  function goHome() {
+    // Clear hash
+    history.pushState('', window.location.pathname, window.location.pathname);
+
+    // Hide iframe, show hero
+    iframeView.classList.remove('active');
+    reportIframe.src = '';
+
+    heroSection.style.display = '';
+    cardsSection.style.display = '';
+    comparisonSection.style.display = '';
+    document.querySelector('.footer').style.display = '';
+
+    // Update nav buttons
+    navBtns.forEach(function(btn) {
+      btn.classList.remove('active');
+    });
+
+    window.scrollTo(0, 0);
+  }
+
+  // Handle hash changes
+  function handleHash() {
+    var hash = window.location.hash.replace('#', '');
+    if (hash && platformMap[hash]) {
+      showPlatform(hash);
+    } else if (iframeView.classList.contains('active')) {
+      goHome();
+    }
+  }
+
+  window.addEventListener('hashchange', handleHash);
+
+  // Expose to global scope for onclick handlers
+  window.showPlatform = showPlatform;
+  window.goHome = goHome;
+
+  // Check initial hash
+  if (window.location.hash) {
+    handleHash();
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, initial-scale=1.0">
+<title>视频号 AI 领域头部博主调研报告</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-snap-type: y mandatory; scroll-behavior: smooth; overflow-y: scroll; scrollbar-width: none; }
+  html::-webkit-scrollbar { display: none; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: #F0F0F0;
+    color: #333333;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  code, .mono { font-family: "SF Mono", "Cascadia Code", "Fira Code", Consolas, monospace; }
+  ::selection { background: #07C160; color: #fff; }
+
+  /* ===== SLIDE ===== */
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    margin: 0 auto;
+    scroll-snap-align: start;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== PAGE NAV ===== */
+  .page-nav {
+    position: fixed;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  .page-dot {
+    width: 6px;
+    height: 6px;
+    background: rgba(0,0,0,0.15);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+  .page-dot.active {
+    background: #07C160;
+    height: 28px;
+  }
+  .page-dot:hover { background: rgba(0,0,0,0.3); }
+  .page-counter {
+    position: fixed;
+    bottom: 28px;
+    right: 40px;
+    z-index: 1000;
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 12px;
+    color: rgba(0,0,0,0.2);
+    letter-spacing: 0.1em;
+  }
+  .key-hint {
+    position: fixed;
+    bottom: 28px;
+    left: 40px;
+    z-index: 1000;
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 11px;
+    color: rgba(0,0,0,0.15);
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== SLIDE HEADER ===== */
+  .slide-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 48px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #E8E8E8;
+  }
+  .slide-num {
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 13px;
+    color: #07C160;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    min-width: 32px;
+  }
+  .slide-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1A1A1A;
+    letter-spacing: -0.02em;
+  }
+  .slide-title-line {
+    flex: 1;
+    height: 1px;
+    background: #E8E8E8;
+  }
+
+  /* ===== SLIDE 1: COVER ===== */
+  .s-cover {
+    background: #FFFFFF;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 160px;
+  }
+  .cover-stripe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 6px;
+    background: #07C160;
+  }
+  .cover-grid {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+    background-size: 120px 120px;
+    pointer-events: none;
+  }
+  .cover-tag {
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #07C160;
+    margin-bottom: 36px;
+    font-weight: 600;
+  }
+  .cover-title {
+    font-size: 68px;
+    font-weight: 900;
+    line-height: 1.15;
+    color: #1A1A1A;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+  .cover-title .green { color: #07C160; }
+  .cover-sub {
+    font-size: 20px;
+    font-weight: 300;
+    color: #999999;
+    letter-spacing: 0.04em;
+    margin-bottom: 72px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 56px;
+    font-size: 14px;
+    color: #666666;
+  }
+  .cover-meta-item span {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: #AAAAAA;
+    font-weight: 500;
+  }
+  .cover-bottom {
+    position: absolute;
+    bottom: 0; left: 160px; right: 160px;
+    height: 1px;
+    background: linear-gradient(90deg, #07C160, transparent 80%);
+  }
+  .cover-right-mark {
+    position: absolute;
+    right: 160px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: right;
+  }
+  .cover-right-mark .big-num {
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(7,193,96,0.06);
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+  .cover-right-mark .sub-label {
+    font-size: 14px;
+    color: #CCCCCC;
+    letter-spacing: 0.1em;
+    margin-top: -8px;
+  }
+
+  /* ===== SLIDE 2: OVERVIEW ===== */
+  .s-overview {
+    background: #FAFAFA;
+    padding: 64px 120px;
+  }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 48px;
+    background: #E0E0E0;
+  }
+  .stat-cell {
+    background: #FFFFFF;
+    padding: 36px 32px;
+    position: relative;
+  }
+  .stat-cell::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 3px;
+    background: #07C160;
+    transition: width 0.6s ease;
+  }
+  .stat-cell:hover::after { width: 100%; }
+  .stat-label {
+    font-size: 12px;
+    color: #AAAAAA;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .stat-value {
+    font-size: 44px;
+    font-weight: 900;
+    color: #1A1A1A;
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: -0.03em;
+  }
+  .stat-value .unit {
+    font-size: 18px;
+    font-weight: 400;
+    color: #999999;
+    margin-left: 4px;
+  }
+  .stat-desc {
+    font-size: 13px;
+    color: #888888;
+    line-height: 1.5;
+  }
+
+  .overview-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    flex: 1;
+  }
+  .chart-block {
+    display: flex;
+    flex-direction: column;
+  }
+  .chart-block h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin-bottom: 28px;
+    letter-spacing: 0.02em;
+  }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .bar-label {
+    width: 90px;
+    font-size: 13px;
+    color: #666666;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .bar-track {
+    flex: 1;
+    height: 32px;
+    background: #F0F0F0;
+    position: relative;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFFFFF;
+    transition: width 0.8s ease;
+  }
+  .bar-fill.green { background: #07C160; }
+  .bar-fill.dark-green { background: #059B4D; }
+  .bar-fill.mid { background: #999999; }
+  .bar-fill.light { background: #BBBBBB; }
+
+  .insight-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .insight-item {
+    padding: 18px 22px;
+    background: #FFFFFF;
+    border-left: 3px solid #07C160;
+    font-size: 14px;
+    color: #666666;
+    line-height: 1.7;
+  }
+  .insight-item strong {
+    color: #1A1A1A;
+    font-weight: 700;
+  }
+
+  /* ===== SLIDE 3-6: BLOGGERS ===== */
+  .s-bloggers {
+    background: #FFFFFF;
+    padding: 56px 120px;
+  }
+  .bloggers-table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .table-head {
+    display: grid;
+    grid-template-columns: 56px 180px 110px 160px 200px 1fr;
+    gap: 20px;
+    padding: 0 0 14px 0;
+    border-bottom: 2px solid #1A1A1A;
+    margin-bottom: 4px;
+  }
+  .table-head span {
+    font-size: 10px;
+    color: #AAAAAA;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .table-row {
+    display: grid;
+    grid-template-columns: 56px 180px 110px 160px 200px 1fr;
+    gap: 20px;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #F0F0F0;
+    transition: background 0.15s;
+  }
+  .table-row:hover {
+    background: #FAFFFE;
+  }
+  .row-rank {
+    font-size: 28px;
+    font-weight: 900;
+    color: #E0E0E0;
+    font-variant-numeric: tabular-nums;
+  }
+  .table-row:nth-child(-n+2) .row-rank { color: #07C160; }
+  .row-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1A1A1A;
+    white-space: nowrap;
+  }
+  .row-fans {
+    font-size: 14px;
+    color: #07C160;
+    font-weight: 700;
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+  .row-tags {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    background: #F5F5F5;
+    color: #888888;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    border: 1px solid #EEEEEE;
+  }
+  .tag-m {
+    border-color: #07C160;
+    color: #07C160;
+    background: #F0FFF5;
+  }
+  .row-desc {
+    font-size: 13px;
+    color: #999999;
+    line-height: 1.4;
+  }
+
+  /* ===== SLIDE 7: TRENDS ===== */
+  .s-trends {
+    background: #FAFAFA;
+    padding: 64px 120px;
+  }
+  .trends-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr 1fr;
+    gap: 2px;
+    flex: 1;
+    background: #E0E0E0;
+  }
+  .trend-cell {
+    background: #FFFFFF;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .trend-cell:hover { background: #FAFFFE; }
+  .trend-idx {
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(7,193,96,0.06);
+    position: absolute;
+    top: 12px;
+    right: 24px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .trend-cell h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin-bottom: 12px;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    position: relative;
+    z-index: 1;
+  }
+  .trend-cell p {
+    font-size: 13px;
+    color: #888888;
+    line-height: 1.75;
+    position: relative;
+    z-index: 1;
+  }
+  .trend-tag {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 4px 12px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-weight: 600;
+    background: #F0FFF5;
+    color: #07C160;
+    position: relative;
+    z-index: 1;
+  }
+  .trend-tag.warn {
+    background: #FFF8F0;
+    color: #CC6600;
+  }
+
+  /* ===== SLIDE 8: SUMMARY ===== */
+  .s-summary {
+    background: #FFFFFF;
+    padding: 64px 120px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: #E0E0E0;
+    flex: 1;
+  }
+  .summary-cell {
+    background: #FFFFFF;
+    padding: 40px 36px;
+    display: flex;
+    flex-direction: column;
+  }
+  .summary-cell h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1A1A1A;
+    margin-bottom: 20px;
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .summary-cell h3::before {
+    content: '';
+    width: 4px;
+    height: 18px;
+    background: #07C160;
+    flex-shrink: 0;
+  }
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid #F5F5F5;
+  }
+  .summary-item:last-child { border-bottom: none; }
+  .summary-item-label {
+    font-size: 13px;
+    color: #999999;
+  }
+  .summary-item-value {
+    font-size: 13px;
+    color: #333333;
+    font-weight: 600;
+    text-align: right;
+    max-width: 60%;
+    line-height: 1.4;
+  }
+
+  .summary-footer {
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 2px solid #E8E8E8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .summary-footer-text {
+    font-size: 12px;
+    color: #CCCCCC;
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    letter-spacing: 0.08em;
+  }
+  .summary-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .summary-footer-brand span {
+    font-size: 12px;
+    color: #CCCCCC;
+    letter-spacing: 0.05em;
+  }
+  .brand-sq {
+    width: 16px;
+    height: 16px;
+    background: #07C160;
+  }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow-section {
+    margin-top: 32px;
+    padding: 28px 32px;
+    background: #F7F7F7;
+    border: 1px solid #EEEEEE;
+  }
+  .flow-section h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin-bottom: 20px;
+    letter-spacing: 0.05em;
+  }
+  .flow-chain {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    justify-content: center;
+  }
+  .flow-node {
+    padding: 12px 28px;
+    background: #FFFFFF;
+    border: 2px solid #07C160;
+    font-size: 14px;
+    font-weight: 700;
+    color: #07C160;
+    text-align: center;
+    position: relative;
+  }
+  .flow-node:first-child { border-radius: 4px 0 0 4px; }
+  .flow-node:last-child { border-radius: 0 4px 4px 0; }
+  .flow-arrow {
+    width: 40px;
+    height: 2px;
+    background: #07C160;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .flow-arrow::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: -4px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid #07C160;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active .stat-cell,
+  .slide.active .trend-cell,
+  .slide.active .table-row,
+  .slide.active .summary-cell,
+  .slide.active .insight-item {
+    animation: fadeIn 0.4s ease forwards;
+    opacity: 0;
+  }
+  .slide.active .stat-cell:nth-child(1) { animation-delay: 0.04s; }
+  .slide.active .stat-cell:nth-child(2) { animation-delay: 0.08s; }
+  .slide.active .stat-cell:nth-child(3) { animation-delay: 0.12s; }
+  .slide.active .stat-cell:nth-child(4) { animation-delay: 0.16s; }
+  .slide.active .table-row:nth-child(1) { animation-delay: 0.02s; }
+  .slide.active .table-row:nth-child(2) { animation-delay: 0.04s; }
+  .slide.active .table-row:nth-child(3) { animation-delay: 0.06s; }
+  .slide.active .table-row:nth-child(4) { animation-delay: 0.08s; }
+  .slide.active .table-row:nth-child(5) { animation-delay: 0.10s; }
+  .slide.active .trend-cell:nth-child(1) { animation-delay: 0.03s; }
+  .slide.active .trend-cell:nth-child(2) { animation-delay: 0.06s; }
+  .slide.active .trend-cell:nth-child(3) { animation-delay: 0.09s; }
+  .slide.active .trend-cell:nth-child(4) { animation-delay: 0.12s; }
+  .slide.active .trend-cell:nth-child(5) { animation-delay: 0.15s; }
+  .slide.active .trend-cell:nth-child(6) { animation-delay: 0.18s; }
+  .slide.active .summary-cell:nth-child(1) { animation-delay: 0.04s; }
+  .slide.active .summary-cell:nth-child(2) { animation-delay: 0.08s; }
+  .slide.active .summary-cell:nth-child(3) { animation-delay: 0.12s; }
+  .slide.active .summary-cell:nth-child(4) { animation-delay: 0.16s; }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="page-nav" id="pageNav"></nav>
+<div class="page-counter" id="pageCounter">01 / 08</div>
+<div class="key-hint">SCROLL / ARROW KEYS TO NAVIGATE</div>
+
+<!-- ==================== SLIDE 1: COVER ==================== -->
+<section class="slide s-cover" data-index="0">
+  <div class="cover-stripe"></div>
+  <div class="cover-grid"></div>
+  <div class="cover-tag">WeChat Channels Research</div>
+  <h1 class="cover-title">
+    视频号 <span class="green">AI</span> 领域<br>头部博主调研报告
+  </h1>
+  <p class="cover-sub">2025-2026 / 前20位博主深度分析</p>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <span>Date</span>
+      2026.04
+    </div>
+    <div class="cover-meta-item">
+      <span>Scope</span>
+      Top 20 Bloggers
+    </div>
+    <div class="cover-meta-item">
+      <span>Platform</span>
+      WeChat Channels
+    </div>
+    <div class="cover-meta-item">
+      <span>Domain</span>
+      Artificial Intelligence
+    </div>
+  </div>
+  <div class="cover-right-mark">
+    <div class="big-num">20</div>
+    <div class="sub-label">AI BLOGGERS</div>
+  </div>
+  <div class="cover-bottom"></div>
+</section>
+
+<!-- ==================== SLIDE 2: DATA OVERVIEW ==================== -->
+<section class="slide s-overview" data-index="1">
+  <div class="slide-header">
+    <span class="slide-num">02</span>
+    <h2 class="slide-title">数据概览</h2>
+    <div class="slide-title-line"></div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-cell">
+      <div class="stat-label">博主总数</div>
+      <div class="stat-value">20<span class="unit">位</span></div>
+      <div class="stat-desc">覆盖工具测评、知识付费、创业实战等方向</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">核心变现</div>
+      <div class="stat-value" style="font-size:32px;">知识付费</div>
+      <div class="stat-desc">+ 私域引流双轮驱动</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">平台阶段</div>
+      <div class="stat-value" style="font-size:32px;">流量红利期</div>
+      <div class="stat-desc">视频号仍处于增长上升通道</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">用户画像</div>
+      <div class="stat-value">72<span class="unit">%</span></div>
+      <div class="stat-desc">一二三线城市用户占比</div>
+    </div>
+  </div>
+
+  <div class="overview-bottom">
+    <div class="chart-block">
+      <h3>变现方式分布</h3>
+      <div class="bar-row">
+        <div class="bar-label">知识付费</div>
+        <div class="bar-track"><div class="bar-fill green" style="width:35%">35%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">引流私域</div>
+        <div class="bar-track"><div class="bar-fill dark-green" style="width:30%">30%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">直播带货</div>
+        <div class="bar-track"><div class="bar-fill mid" style="width:15%">15%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">品牌合作</div>
+        <div class="bar-track"><div class="bar-fill light" style="width:12%">12%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">企业培训</div>
+        <div class="bar-track"><div class="bar-fill light" style="width:8%">8%</div></div>
+      </div>
+    </div>
+    <div class="chart-block">
+      <h3>核心发现</h3>
+      <div class="insight-list">
+        <div class="insight-item">
+          <strong>私域闭环</strong>是视频号区别于其他平台的核心优势。视频号与公众号、微信群、小程序深度打通，形成完整的商业转化链路。
+        </div>
+        <div class="insight-item">
+          <strong>知识付费占比35%</strong>，仍是AI博主最主要的变现路径。课程客单价从99元到数千元不等，头部博主年营收可达百万级。
+        </div>
+        <div class="insight-item">
+          <strong>用户消费能力强</strong>，72%来自一二三线城市，付费意愿显著高于抖音、快手等平台。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 3: BLOGGERS 1-5 ==================== -->
+<section class="slide s-bloggers" data-index="2">
+  <div class="slide-header">
+    <span class="slide-num">03</span>
+    <h2 class="slide-title">博主列表 / 01-05</h2>
+    <div class="slide-title-line"></div>
+  </div>
+  <div class="bloggers-table">
+    <div class="table-head">
+      <span>Rank</span>
+      <span>Name</span>
+      <span>Fans</span>
+      <span>Style</span>
+      <span>Monetization</span>
+      <span>Representative</span>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">01</div>
+      <div class="row-name">AI卡森粒</div>
+      <div class="row-fans">10万+</div>
+      <div class="row-tags"><span class="tag">AI极客</span><span class="tag">工具测评</span></div>
+      <div class="row-tags"><span class="tag tag-m">知识付费</span><span class="tag tag-m">社群运营</span></div>
+      <div class="row-desc">AI前沿技术解读</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">02</div>
+      <div class="row-name">AI设计小浩哥</div>
+      <div class="row-fans">5万-10万</div>
+      <div class="row-tags"><span class="tag">AI设计教程</span></div>
+      <div class="row-tags"><span class="tag tag-m">卖课</span><span class="tag tag-m">品牌合作</span></div>
+      <div class="row-desc">AI绘画、AI辅助设计</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">03</div>
+      <div class="row-name">鱼总聊AI</div>
+      <div class="row-fans">5万-10万</div>
+      <div class="row-tags"><span class="tag">AI工具合集</span></div>
+      <div class="row-tags"><span class="tag tag-m">广告合作</span><span class="tag tag-m">引流私域</span></div>
+      <div class="row-desc">AI工具合集测评</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">04</div>
+      <div class="row-name">艾克ai分享</div>
+      <div class="row-fans">5万-10万</div>
+      <div class="row-tags"><span class="tag">AI新闻</span><span class="tag">资讯</span></div>
+      <div class="row-tags"><span class="tag tag-m">广告</span><span class="tag tag-m">引流私域</span></div>
+      <div class="row-desc">AI行业动态追踪</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">05</div>
+      <div class="row-name">白虎ai变现星球</div>
+      <div class="row-fans">5万-10万</div>
+      <div class="row-tags"><span class="tag">AI变现教程</span></div>
+      <div class="row-tags"><span class="tag tag-m">卖课</span><span class="tag tag-m">社群付费</span></div>
+      <div class="row-desc">AI变现方法论</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 4: BLOGGERS 6-10 ==================== -->
+<section class="slide s-bloggers" data-index="3">
+  <div class="slide-header">
+    <span class="slide-num">04</span>
+    <h2 class="slide-title">博主列表 / 06-10</h2>
+    <div class="slide-title-line"></div>
+  </div>
+  <div class="bloggers-table">
+    <div class="table-head">
+      <span>Rank</span>
+      <span>Name</span>
+      <span>Fans</span>
+      <span>Style</span>
+      <span>Monetization</span>
+      <span>Representative</span>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">06</div>
+      <div class="row-name">浩PD</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">AI创业实战</span></div>
+      <div class="row-tags"><span class="tag tag-m">知识付费</span><span class="tag tag-m">品牌合作</span></div>
+      <div class="row-desc">AI创业项目实操</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">07</div>
+      <div class="row-name">土豆的AI创业决策</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">AI创业观点</span></div>
+      <div class="row-tags"><span class="tag tag-m">知识付费</span><span class="tag tag-m">引流私域</span></div>
+      <div class="row-desc">AI创业决策分析</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">08</div>
+      <div class="row-name">Ai早早爸</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">AI应用</span><span class="tag">新闻</span></div>
+      <div class="row-tags"><span class="tag tag-m">广告</span><span class="tag tag-m">知识付费</span></div>
+      <div class="row-desc">AI垂直应用案例</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">09</div>
+      <div class="row-name">K大说AI</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">口播</span><span class="tag">观点</span></div>
+      <div class="row-tags"><span class="tag tag-m">品牌合作</span><span class="tag tag-m">知识付费</span></div>
+      <div class="row-desc">大语言模型行业分析</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">10</div>
+      <div class="row-name">AI-张大帅</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">口播</span><span class="tag">教程</span></div>
+      <div class="row-tags"><span class="tag tag-m">知识付费</span><span class="tag tag-m">引流私域</span></div>
+      <div class="row-desc">AI助理工具教程</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 5: BLOGGERS 11-15 ==================== -->
+<section class="slide s-bloggers" data-index="4">
+  <div class="slide-header">
+    <span class="slide-num">05</span>
+    <h2 class="slide-title">博主列表 / 11-15</h2>
+    <div class="slide-title-line"></div>
+  </div>
+  <div class="bloggers-table">
+    <div class="table-head">
+      <span>Rank</span>
+      <span>Name</span>
+      <span>Fans</span>
+      <span>Style</span>
+      <span>Monetization</span>
+      <span>Representative</span>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">11</div>
+      <div class="row-name">格鲁特聊AI</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">口播</span><span class="tag">工具测评</span></div>
+      <div class="row-tags"><span class="tag tag-m">企业服务</span><span class="tag tag-m">品牌合作</span></div>
+      <div class="row-desc">AI工具用法讲解</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">12</div>
+      <div class="row-name">AI-尼克</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">口播</span><span class="tag">变现</span></div>
+      <div class="row-tags"><span class="tag tag-m">知识付费</span><span class="tag tag-m">社群</span></div>
+      <div class="row-desc">AI赚钱方法</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">13</div>
+      <div class="row-name">赛博克里斯</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">口播</span><span class="tag">创业讲解</span></div>
+      <div class="row-tags"><span class="tag tag-m">知识付费</span><span class="tag tag-m">品牌合作</span></div>
+      <div class="row-desc">AI创业讲解</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">14</div>
+      <div class="row-name">麦子和AI</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">企业培训</span><span class="tag">教程</span></div>
+      <div class="row-tags"><span class="tag tag-m">企业培训</span></div>
+      <div class="row-desc">企业AI培训</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">15</div>
+      <div class="row-name">易威玩赚AI</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">口播</span><span class="tag">变现</span></div>
+      <div class="row-tags"><span class="tag tag-m">知识付费</span><span class="tag tag-m">品牌合作</span></div>
+      <div class="row-desc">AI赚钱玩法</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 6: BLOGGERS 16-20 ==================== -->
+<section class="slide s-bloggers" data-index="5">
+  <div class="slide-header">
+    <span class="slide-num">06</span>
+    <h2 class="slide-title">博主列表 / 16-20</h2>
+    <div class="slide-title-line"></div>
+  </div>
+  <div class="bloggers-table">
+    <div class="table-head">
+      <span>Rank</span>
+      <span>Name</span>
+      <span>Fans</span>
+      <span>Style</span>
+      <span>Monetization</span>
+      <span>Representative</span>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">16</div>
+      <div class="row-name">Aiden全域流量</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">流量运营</span></div>
+      <div class="row-tags"><span class="tag tag-m">知识付费</span><span class="tag tag-m">引流私域</span></div>
+      <div class="row-desc">AI+全域流量运营</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">17</div>
+      <div class="row-name">ai实验老炮</div>
+      <div class="row-fans">1万-5万</div>
+      <div class="row-tags"><span class="tag">工具测评</span><span class="tag">实验</span></div>
+      <div class="row-tags"><span class="tag tag-m">广告</span><span class="tag tag-m">引流私域</span></div>
+      <div class="row-desc">AI工具实测</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">18</div>
+      <div class="row-name">AI破局神器</div>
+      <div class="row-fans">1万以下</div>
+      <div class="row-tags"><span class="tag">工具推荐</span></div>
+      <div class="row-tags"><span class="tag tag-m">引流私域</span><span class="tag tag-m">广告</span></div>
+      <div class="row-desc">AI工具合集</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">19</div>
+      <div class="row-name">AI未来学堂</div>
+      <div class="row-fans">1万以下</div>
+      <div class="row-tags"><span class="tag">教程</span><span class="tag">资讯</span></div>
+      <div class="row-tags"><span class="tag tag-m">知识付费</span><span class="tag tag-m">引流私域</span></div>
+      <div class="row-desc">AI入门教学</div>
+    </div>
+    <div class="table-row">
+      <div class="row-rank">20</div>
+      <div class="row-name">李一舟AI (争议)</div>
+      <div class="row-fans">数万</div>
+      <div class="row-tags"><span class="tag">口播</span><span class="tag">知识付费</span></div>
+      <div class="row-tags"><span class="tag tag-m">卖课</span><span class="tag tag-m">直播</span></div>
+      <div class="row-desc">流量变现课</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 7: TRENDS ==================== -->
+<section class="slide s-trends" data-index="6">
+  <div class="slide-header">
+    <span class="slide-num">07</span>
+    <h2 class="slide-title">趋势分析</h2>
+    <div class="slide-title-line"></div>
+  </div>
+  <div class="trends-grid">
+    <div class="trend-cell">
+      <div class="trend-idx">01</div>
+      <h3>"AI + 私域"成为标准配置</h3>
+      <p>几乎所有头部博主都将视频号作为私域流量入口，通过公众号文章、微信群沉淀、小程序变现构建完整商业闭环。私域运营能力直接决定变现天花板。</p>
+      <span class="trend-tag">私域闭环</span>
+    </div>
+    <div class="trend-cell">
+      <div class="trend-idx">02</div>
+      <h3>知识付费仍是核心变现手段</h3>
+      <p>35%的博主以知识付费为主要收入来源。课程形态从录播课向社群陪伴、项目陪跑、1对1咨询等高客单价服务升级，用户为"结果"买单的意愿增强。</p>
+      <span class="trend-tag">知识付费</span>
+    </div>
+    <div class="trend-cell">
+      <div class="trend-idx">03</div>
+      <h3>企业服务是头部博主向上突破方向</h3>
+      <p>从To C卖课向To B企业培训、AI落地咨询转型。企业AI转型需求旺盛，客单价可达万元级以上，复购率和客户粘性显著优于个人用户。</p>
+      <span class="trend-tag">企业服务</span>
+    </div>
+    <div class="trend-cell">
+      <div class="trend-idx">04</div>
+      <h3>视频号与公众号深度打通构成私域闭环</h3>
+      <p>视频号负责公域获客，公众号做深度内容沉淀，微信群实现用户运营，小程序完成交易转化。五重联动机制是视频号区别于其他平台的核心壁垒。</p>
+      <span class="trend-tag">生态联动</span>
+    </div>
+    <div class="trend-cell">
+      <div class="trend-idx">05</div>
+      <h3>AI工具测评竞争加剧</h3>
+      <p>工具测评类内容占比高但同质化严重。博主需要建立差异化壁垒：深度测评、垂直场景、真实数据成为竞争关键。泛泛而谈的"AI工具推荐"内容价值递减。</p>
+      <span class="trend-tag">内容升级</span>
+    </div>
+    <div class="trend-cell">
+      <div class="trend-idx">06</div>
+      <h3>内容治理趋严，"李一舟式"野蛮生长空间压缩</h3>
+      <p>平台对虚假宣传、过度承诺的审核力度加大。知识付费课程需通过资质审核，"割韭菜"式营销的生存空间被大幅压缩，内容质量成为长期竞争力。</p>
+      <span class="trend-tag warn">合规监管</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 8: SUMMARY ==================== -->
+<section class="slide s-summary" data-index="7">
+  <div class="slide-header">
+    <span class="slide-num">08</span>
+    <h2 class="slide-title">平台生态总结</h2>
+    <div class="slide-title-line"></div>
+  </div>
+  <div class="summary-grid">
+    <div class="summary-cell">
+      <h3>用户画像</h3>
+      <div class="summary-item">
+        <span class="summary-item-label">城市分布</span>
+        <span class="summary-item-value">72% 一二三线城市</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">消费能力</span>
+        <span class="summary-item-value">显著高于短视频平台均值</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">年龄特征</span>
+        <span class="summary-item-value">30-50岁商务人群占比较高</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">内容偏好</span>
+        <span class="summary-item-value">实用工具 + 变现方法论</span>
+      </div>
+    </div>
+    <div class="summary-cell">
+      <h3>内容调性</h3>
+      <div class="summary-item">
+        <span class="summary-item-label">叙事风格</span>
+        <span class="summary-item-value">偏实用工具 + 变现方法论 + 私域运营</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">形式特点</span>
+        <span class="summary-item-value">口播为主，工具演示为辅</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">内容深度</span>
+        <span class="summary-item-value">实操导向，强调可落地性</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">更新频率</span>
+        <span class="summary-item-value">日更或隔日更新为主</span>
+      </div>
+    </div>
+    <div class="summary-cell">
+      <h3>商业价值</h3>
+      <div class="summary-item">
+        <span class="summary-item-label">核心优势</span>
+        <span class="summary-item-value">私域闭环，用户付费意愿强</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">增长阶段</span>
+        <span class="summary-item-value">流量红利期，竞争尚不充分</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">变现效率</span>
+        <span class="summary-item-value">知识付费转化率高于其他平台</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">品牌投放</span>
+        <span class="summary-item-value">适合AI工具品牌获客</span>
+      </div>
+    </div>
+    <div class="summary-cell">
+      <h3>变现特点</h3>
+      <div class="summary-item">
+        <span class="summary-item-label">双轮驱动</span>
+        <span class="summary-item-value">知识付费 + 私域引流</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">高客单价</span>
+        <span class="summary-item-value">企业服务客单价万元级以上</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">复购特征</span>
+        <span class="summary-item-value">私域社群复购率显著高于公域</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-item-label">增长最快</span>
+        <span class="summary-item-value">企业AI培训需求爆发</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-section">
+    <h4>五重联动机制</h4>
+    <div class="flow-chain">
+      <div class="flow-node">视频号</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">公众号</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">微信群</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">小程序</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">直播</div>
+    </div>
+  </div>
+
+  <div class="summary-footer">
+    <span class="summary-footer-text">REPORT / WECHAT CHANNELS AI BLOGGERS / 2026.04</span>
+    <div class="summary-footer-brand">
+      <span>WECHAT CHANNELS</span>
+      <div class="brand-sq"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  var slides = document.querySelectorAll('.slide');
+  var totalSlides = slides.length;
+  var nav = document.getElementById('pageNav');
+  var counter = document.getElementById('pageCounter');
+  var currentSlide = 0;
+
+  // Create dots
+  for (var i = 0; i < totalSlides; i++) {
+    var dot = document.createElement('button');
+    dot.className = 'page-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    dot.addEventListener('click', function(idx) {
+      return function() { goToSlide(idx); };
+    }(i));
+    nav.appendChild(dot);
+  }
+
+  function goToSlide(index) {
+    if (index < 0 || index >= totalSlides) return;
+    slides[index].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function updateActive() {
+    var dots = nav.querySelectorAll('.page-dot');
+    slides.forEach(function(slide, i) {
+      var rect = slide.getBoundingClientRect();
+      var inView = rect.top >= -10 && rect.top < window.innerHeight / 2;
+      if (inView) {
+        currentSlide = i;
+        dots.forEach(function(d, j) {
+          d.classList.toggle('active', j === i);
+        });
+        counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(totalSlides).padStart(2, '0');
+        slides.forEach(function(s) { s.classList.remove('active'); });
+        slide.classList.add('active');
+      }
+    });
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault();
+      goToSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      goToSlide(currentSlide - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goToSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goToSlide(totalSlides - 1);
+    }
+  });
+
+  // Scroll tracking
+  var scrollTimeout;
+  document.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(updateActive, 50);
+  });
+
+  // Initial state
+  slides[0].classList.add('active');
+  updateActive();
+
+  // Auto-scale for smaller viewports
+  function scaleBody() {
+    var scaleX = window.innerWidth / 1920;
+    var scaleY = window.innerHeight / 1080;
+    var scale = Math.min(scaleX, scaleY);
+    document.documentElement.style.transform = 'scale(' + scale + ')';
+    document.documentElement.style.transformOrigin = 'top left';
+    document.documentElement.style.width = (100 / scale) + '%';
+    document.documentElement.style.height = (100 / scale) + '%';
+  }
+  scaleBody();
+  window.addEventListener('resize', scaleBody);
+})();
+</script>
+
+</body>
+</html>
