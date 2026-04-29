@@ -2,12 +2,13 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1920, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>B站 AI 领域头部博主调研报告</title>
 <style>
   /* ===== RESET & BASE ===== */
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html {
+    min-width: 1920px;
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
     overflow-y: scroll;
@@ -1018,7 +1019,7 @@
   // Auto-scale for smaller viewports
   function scaleDeck() {
     const scaleX = window.innerWidth / 1920;
-    document.documentElement.style.zoom = scaleX;
+    document.documentElement.style.zoom = Math.min(scaleX, 1);
   }
   scaleDeck();
   window.addEventListener('resize', scaleDeck);

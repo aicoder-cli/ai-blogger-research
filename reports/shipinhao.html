@@ -2,12 +2,12 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1920, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>视频号 AI 领域头部博主调研报告</title>
 <style>
   /* ===== RESET & BASE ===== */
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-snap-type: y mandatory; scroll-behavior: smooth; overflow-y: scroll; scrollbar-width: none; }
+  html { min-width: 1920px; scroll-snap-type: y mandatory; scroll-behavior: smooth; overflow-y: scroll; scrollbar-width: none; }
   html::-webkit-scrollbar { display: none; }
   body {
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -1219,12 +1219,7 @@
   // Auto-scale for smaller viewports
   function scaleBody() {
     var scaleX = window.innerWidth / 1920;
-    var scaleY = window.innerHeight / 1080;
-    var scale = Math.min(scaleX, scaleY);
-    document.documentElement.style.transform = 'scale(' + scale + ')';
-    document.documentElement.style.transformOrigin = 'top left';
-    document.documentElement.style.width = (100 / scale) + '%';
-    document.documentElement.style.height = (100 / scale) + '%';
+    document.documentElement.style.zoom = Math.min(scaleX, 1);
   }
   scaleBody();
   window.addEventListener('resize', scaleBody);
