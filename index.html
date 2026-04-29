@@ -26,6 +26,7 @@
   --zhihu: #0066FF;
   --shipinhao: #07C160;
   --gongzhonghao: #07C160;
+  --bilibili: #00A1D6;
   --nav-height: 64px;
   --max-width: 1200px;
   --radius: 12px;
@@ -639,9 +640,12 @@ body {
 <nav class="nav">
   <div class="nav-left" onclick="goHome()">
     <span class="nav-title">AI 博主调研</span>
-    <span class="nav-subtitle">2025-2026 &middot; 五大平台 &middot; 100位头部创作者</span>
+    <span class="nav-subtitle">2025-2026 &middot; 六大平台 &middot; 120位头部创作者</span>
   </div>
   <div class="nav-platforms">
+    <button class="nav-platform-btn" data-platform="bilibili" onclick="showPlatform('bilibili')">
+      <span class="nav-dot" style="background:var(--bilibili)"></span>B站
+    </button>
     <button class="nav-platform-btn" data-platform="xiaohongshu" onclick="showPlatform('xiaohongshu')">
       <span class="nav-dot" style="background:var(--xiaohongshu)"></span>小红书
     </button>
@@ -676,20 +680,20 @@ body {
       调研报告 &middot; 2026.04
     </div>
 
-    <h1 class="fade-in delay-2">五大平台 AI 领域头部博主全景分析</h1>
+    <h1 class="fade-in delay-2">六大平台 AI 领域头部博主全景分析</h1>
 
     <p class="hero-desc fade-in delay-3">
-      覆盖公众号、小红书、抖音、知乎、视频号，共计 100 位头部 AI 博主的深度调研。从内容风格到变现模式，全方位拆解 AI 创作者生态。
+      覆盖B站、小红书、抖音、知乎、视频号、公众号，共计 120 位头部 AI 博主的深度调研。从内容风格到变现模式，全方位拆解 AI 创作者生态。
     </p>
 
     <div class="hero-stats fade-in delay-4">
       <div class="hero-stat">
-        <span class="hero-stat-value">5</span>
+        <span class="hero-stat-value">6</span>
         <span class="hero-stat-label">个平台</span>
       </div>
       <span class="hero-stat-sep">|</span>
       <div class="hero-stat">
-        <span class="hero-stat-value">100</span>
+        <span class="hero-stat-value">120</span>
         <span class="hero-stat-label">位博主</span>
       </div>
       <span class="hero-stat-sep">|</span>
@@ -710,6 +714,22 @@ body {
     <div class="cards-section-title fade-in delay-5">平台报告</div>
 
     <div class="cards-grid">
+      <div class="card fade-in delay-5" onclick="showPlatform('bilibili')">
+        <div>
+          <div class="card-header">
+            <div class="card-platform">
+              <span class="card-dot" style="background:var(--bilibili)"></span>
+              <span class="card-name">B站</span>
+            </div>
+            <span class="card-count">20 位博主</span>
+          </div>
+          <p class="card-desc">中长视频为主，AI 技术科普与工具教程内容深度领先，学术背景博主占比高，弹幕互动文化独特。</p>
+        </div>
+        <div class="card-action">
+          查看报告 <span class="card-action-arrow">&rarr;</span>
+        </div>
+      </div>
+
       <div class="card fade-in delay-5" onclick="showPlatform('xiaohongshu')">
         <div>
           <div class="card-header">
@@ -802,6 +822,7 @@ body {
       <thead>
         <tr>
           <th></th>
+          <th class="platform-header"><span class="th-dot" style="background:var(--bilibili)"></span>B站</th>
           <th class="platform-header"><span class="th-dot" style="background:var(--xiaohongshu)"></span>小红书</th>
           <th class="platform-header"><span class="th-dot" style="background:var(--douyin)"></span>抖音</th>
           <th class="platform-header"><span class="th-dot" style="background:var(--zhihu)"></span>知乎</th>
@@ -812,6 +833,7 @@ body {
       <tbody>
         <tr>
           <td>核心变现方式</td>
+          <td>花火商单、知识付费</td>
           <td>品牌合作、带货佣金</td>
           <td>直播带货、星图广告</td>
           <td>知识付费、盐选专栏</td>
@@ -820,6 +842,7 @@ body {
         </tr>
         <tr>
           <td>内容特点</td>
+          <td>中长视频、技术科普</td>
           <td>图文笔记、工具测评</td>
           <td>短视频、场景演示</td>
           <td>深度长文、技术解析</td>
@@ -828,6 +851,7 @@ body {
         </tr>
         <tr>
           <td>用户画像</td>
+          <td>18-30岁、Z世代</td>
           <td>18-35岁女性为主</td>
           <td>泛人群、下沉市场</td>
           <td>高学历、一二线城市</td>
@@ -836,6 +860,7 @@ body {
         </tr>
         <tr>
           <td>付费意愿</td>
+          <td>较高</td>
           <td>中等偏上</td>
           <td>中等</td>
           <td>较高</td>
@@ -844,6 +869,7 @@ body {
         </tr>
         <tr>
           <td>商业价值</td>
+          <td>深度内容影响力强</td>
           <td>品牌种草能力强</td>
           <td>流量爆发力强</td>
           <td>专业背书价值高</td>
@@ -892,6 +918,7 @@ body {
   'use strict';
 
   var platformMap = {
+    bilibili: { name: 'B站', color: '#00A1D6', file: 'bilibili.html' },
     xiaohongshu: { name: '小红书', color: '#FF2442', file: 'xiaohongshu.html' },
     douyin:      { name: '抖音',   color: '#FE2C55', file: 'douyin.html' },
     zhihu:       { name: '知乎',   color: '#0066FF', file: 'zhihu.html' },

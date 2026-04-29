@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B站AI领域Top20博主 · 盈利模式与影响力深度分析</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Sans SC',sans-serif;background:#0a0a0f;color:#e0e0e0;line-height:1.7}
+    #root{min-height:100vh}
+    ::selection{background:rgba(0,212,170,.3)}
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:#111}
+    ::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes barGrow{from{width:0}to{width:var(--w)}}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useMemo}=React;
+
+/* ═══════════════════════════════════════
+   DATA — 20位博主完整画像
+   ═══════════════════════════════════════ */
+const BLOGGERS=[
+  {rank:1,name:"数字生命卡兹克",fans:185,category:"AI综合",avatar:"KZK",color:"#00d4aa",
+   tags:["AI产品测评","前沿追踪","亲身体验"],
+   style:"亲测派",styleDesc:"深度体验式测评，擅长将复杂AI产品拆解为易懂的使用场景。以亲身测试著称，花499找人上门装AI、亲自给AI投毒测试安全边界。风格幽默犀利，内容覆盖AI产品全链路。",
+   monetization:[
+     {type:"品牌商单",desc:"AI产品品牌定制视频，单条报价10-30万",weight:40},
+     {type:"知识星球",desc:"付费社群「AI内参」，年费365元，约5000+成员",weight:30},
+     {type:"企业咨询",desc:"为企业提供AI产品选型和落地策略咨询",weight:20},
+     {type:"平台激励",desc:"B站创作激励+充电计划",weight:10}
+   ],
+   influence:{breadth:"全网多平台（B站/公众号/微博/抖音）",depth:"AIGCRank年度影响力TOP1，行业标杆级",engagement:"单条视频平均弹幕2000+，评论互动率高"},
+   videos:680,avgPlay:85,platform:"B站+公众号+微博",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:2,name:"漫士沉思录",fans:168,category:"AI技术科普",avatar:"MS",color:"#ff6b6b",
+   tags:["数学原理","深度学习","学术论文"],
+   style:"学术科普派",styleDesc:"清华姚班背景，将前沿论文和数学原理用动画和通俗语言拆解。两年百万粉，视频制作精良，动画演示清晰，是理解AI底层原理的首选频道。",
+   monetization:[
+     {type:"知识付费课程",desc:"AI数学基础系列课程，单价199-499元",weight:35},
+     {type:"B站创作激励",desc:"高播放量带来的平台分成收入",weight:25},
+     {type:"高校讲座",desc:"受邀高校和企业进行AI科普讲座",weight:25},
+     {type:"品牌合作",desc:"教育科技类品牌定制内容",weight:15}
+   ],
+   influence:{breadth:"B站+抖音+公众号三平台矩阵",depth:"清华姚班背书，学术权威性极高",engagement:"平均播放120万，完播率在知识区名列前茅"},
+   videos:320,avgPlay:120,platform:"B站+抖音+公众号",source:"AIGCRank 2025年度AI博主榜单 / 36氪专访"},
+  {rank:3,name:"林亦LYi",fans:152,category:"AI教程",avatar:"LY",color:"#ffd93d",
+   tags:["AI工具教程","实操演示","效率提升"],
+   style:"实操教程派",styleDesc:"短小精悍的工具教程，看完即可上手。聚焦Cursor/Claude等热门工具，更新频率极高，紧跟最新AI工具动态。把复杂的东西讲得特别简单。",
+   monetization:[
+     {type:"付费社群",desc:"AI工具实战社群，年费299元",weight:35},
+     {type:"品牌合作",desc:"AI工具品牌推广合作",weight:30},
+     {type:"课程销售",desc:"AI工具入门到精通系列课程",weight:25},
+     {type:"分销佣金",desc:"AI工具推荐分销CPS收入",weight:10}
+   ],
+   influence:{breadth:"B站+小红书双平台运营",depth:"AI工具教程领域标杆，入门用户首选",engagement:"更新频率极高（周更3-5条），用户粘性强"},
+   videos:890,avgPlay:45,platform:"B站+小红书",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:4,name:"量子位",fans:138,category:"AI科技媒体",avatar:"LZW",color:"#6c5ce7",
+   tags:["AI新闻","行业报告","技术解读"],
+   style:"专业媒体派",styleDesc:"专业AI科技媒体，每日更新行业动态、技术突破和投融资信息。覆盖AI行业全链条，从学术前沿到产业落地均有深度报道。",
+   monetization:[
+     {type:"企业广告",desc:"AI企业品牌广告和原生内容合作",weight:40},
+     {type:"行业峰会",desc:"主办/协办AI行业峰会和论坛",weight:25},
+     {type:"付费报告",desc:"AI行业研究报告和数据服务",weight:20},
+     {type:"内容授权",desc:"原创内容授权转载",weight:15}
+   ],
+   influence:{breadth:"全网分发（B站/公众号/头条/知乎等）",depth:"国内头部AI媒体，行业话语权强",engagement:"日更频率，覆盖面极广但单条互动偏低"},
+   videos:3200,avgPlay:15,platform:"B站+公众号+全网",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:5,name:"晓辉博士",fans:125,category:"AI技术科普",avatar:"XH",color:"#00b894",
+   tags:["大模型原理","技术拆解","行业分析"],
+   style:"学术深度派",styleDesc:"博士级深度解读，擅长大模型原理拆解和AI行业趋势分析。内容有深度但不晦涩，兼顾专业性和可看性。",
+   monetization:[
+     {type:"企业培训",desc:"面向企业的AI技术内训服务",weight:35},
+     {type:"技术咨询",desc:"AI技术选型和架构咨询",weight:25},
+     {type:"B站创作激励",desc:"平台分成+充电收入",weight:25},
+     {type:"知识付费",desc:"大模型技术系列付费内容",weight:15}
+   ],
+   influence:{breadth:"B站+公众号双平台",depth:"博士级专业背书，技术深度领先",engagement:"平均播放65万，评论区技术讨论质量高"},
+   videos:280,avgPlay:65,platform:"B站+公众号",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:6,name:"机器之心",fans:118,category:"AI科技媒体",avatar:"JQZX",color:"#e17055",
+   tags:["AI论文","技术前沿","产业报道"],
+   style:"学术产业派",styleDesc:"国内最早的专业AI媒体之一，论文解读和产业报道并重。以论文速递和技术解读为核心，覆盖学术界和产业界。",
+   monetization:[
+     {type:"企业广告",desc:"AI企业品牌广告投放",weight:40},
+     {type:"学术会议",desc:"主办AI学术会议和产业论坛",weight:25},
+     {type:"付费内容",desc:"会员制深度内容+研究报告",weight:20},
+     {type:"招聘平台",desc:"AI人才招聘服务佣金",weight:15}
+   ],
+   influence:{breadth:"官网+公众号+B站+海外社群",depth:"学术界影响力极强，论文解读权威",engagement:"专业受众为主，互动深度高但广度有限"},
+   videos:2800,avgPlay:12,platform:"B站+公众号+官网",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:7,name:"秋芝2046",fans:105,category:"AI综合",avatar:"QZ",color:"#fd79a8",
+   tags:["AI应用","产品体验","行业观察"],
+   style:"体验推荐派",styleDesc:"聚焦AI实际应用场景，擅长发现和评测各类AI工具的实用价值。内容贴近普通用户需求，是AI入门者的优质信息源。",
+   monetization:[
+     {type:"品牌商单",desc:"AI产品测评合作",weight:35},
+     {type:"知识付费",desc:"AI应用入门课程",weight:30},
+     {type:"社群运营",desc:"付费社群+私域流量变现",weight:20},
+     {type:"平台激励",desc:"B站创作激励收入",weight:15}
+   ],
+   influence:{breadth:"B站+小红书",depth:"AI应用推荐领域头部，用户信任度高",engagement:"粉丝互动活跃，种草转化率高"},
+   videos:520,avgPlay:55,platform:"B站+小红书",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:8,name:"宝玉xp",fans:98,category:"AI提示词",avatar:"BY",color:"#0984e3",
+   tags:["提示词工程","方法论","大模型应用"],
+   style:"方法论派",styleDesc:"系统性提示词工程教学，被誉为「AI领域的园丁」。把复杂技术讲得人人能懂，从提示词入门到精通，一步步激发大模型潜力。",
+   monetization:[
+     {type:"付费课程",desc:"提示词工程系统课程，单价299-699元",weight:40},
+     {type:"企业培训",desc:"企业AI应用培训服务",weight:30},
+     {type:"知识星球",desc:"付费社群，年费399元",weight:20},
+     {type:"图书版税",desc:"AI提示词相关图书出版",weight:10}
+   ],
+   influence:{breadth:"微博108万+B站+公众号",depth:"提示词工程领域权威，方法论体系完整",engagement:"微博互动量极高，教程实用性强"},
+   videos:210,avgPlay:38,platform:"B站+微博+公众号",source:"AIGCRank 2025年度AI博主榜单 / 微博AI影响力榜单"},
+  {rank:9,name:"灵茶山艾府",fans:92,category:"AI技术",avatar:"LC",color:"#00cec9",
+   tags:["算法题解","AI编程","技术面试"],
+   style:"编程技术派",styleDesc:"LeetCode题解+AI编程双线并行，程序员群体的AI学习入口。将AI技术与编程实践深度结合。",
+   monetization:[
+     {type:"B站创作激励",desc:"高更新频率带来的平台分成",weight:30},
+     {type:"付费题解",desc:"算法刷题付费内容",weight:25},
+     {type:"企业内推",desc:"技术人才推荐佣金",weight:25},
+     {type:"品牌合作",desc:"开发者工具品牌推广",weight:20}
+   ],
+   influence:{breadth:"B站+力扣社区",depth:"程序员圈层影响力强，技术面试领域权威",engagement:"程序员受众粘性极高，评论区技术讨论深入"},
+   videos:750,avgPlay:28,platform:"B站+力扣",source:"B站科技区综合排名"},
+  {rank:10,name:"赛文乔伊",fans:88,category:"AI设计",avatar:"SW",color:"#e84393",
+   tags:["AI设计","AIGC创作","硅谷资讯"],
+   style:"设计创作派",styleDesc:"AI+设计跨界创作者，作品视觉冲击力强。定居美国，分享硅谷AI行业一手资讯，以AI设计创作为核心。",
+   monetization:[
+     {type:"品牌合作",desc:"设计工具/AI产品品牌合作",weight:35},
+     {type:"设计项目",desc:"承接AI设计商业项目",weight:30},
+     {type:"付费社群",desc:"AI设计学习社群",weight:20},
+     {type:"课程销售",desc:"AI设计教程",weight:15}
+   ],
+   influence:{breadth:"B站+YouTube双语平台",depth:"AI设计领域标杆，硅谷信息一手来源",engagement:"作品视觉质量极高，传播力强"},
+   videos:340,avgPlay:72,platform:"B站+YouTube",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:11,name:"老石谈芯",fans:82,category:"AI芯片",avatar:"LS",color:"#fdcb6e",
+   tags:["芯片技术","AI硬件","半导体"],
+   style:"硬件专业派",styleDesc:"帝国理工博士，聚焦AI芯片和半导体领域。技术深度与通俗并重，涵盖GPU/TPU/NPU等AI芯片的技术解析。",
+   monetization:[
+     {type:"品牌商单",desc:"芯片/硬件品牌合作",weight:30},
+     {type:"行业咨询",desc:"半导体行业咨询顾问",weight:30},
+     {type:"知识付费",desc:"芯片技术系列课程",weight:25},
+     {type:"平台激励",desc:"B站创作激励+充电",weight:15}
+   ],
+   influence:{breadth:"B站+公众号+网易",depth:"AI芯片领域头部，帝国理工博士背书",engagement:"硬件爱好者圈层影响力强"},
+   videos:420,avgPlay:35,platform:"B站+公众号+网易",source:"B站科技区综合排名"},
+  {rank:12,name:"新智元",fans:78,category:"AI科技媒体",avatar:"XZY",color:"#74b9ff",
+   tags:["AI资讯","产业分析","政策解读"],
+   style:"产业分析派",styleDesc:"AI行业权威资讯平台，覆盖政策、产业、学术三大维度。以产业分析和政策解读见长。",
+   monetization:[
+     {type:"企业广告",desc:"AI企业品牌广告",weight:40},
+     {type:"行业活动",desc:"AI产业峰会和闭门会",weight:25},
+     {type:"付费报告",desc:"AI产业研究报告",weight:20},
+     {type:"会员订阅",desc:"公众号付费阅读内容",weight:15}
+   ],
+   influence:{breadth:"公众号+B站+全网",depth:"AI产业政策解读权威，行业影响力大",engagement:"覆盖面广，产业决策层受众占比高"},
+   videos:2100,avgPlay:10,platform:"B站+公众号+全网",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:13,name:"赛博禅心",fans:72,category:"AI哲学",avatar:"CB",color:"#a29bfe",
+   tags:["AI伦理","哲学思考","人文视角"],
+   style:"人文思辨派",styleDesc:"从哲学和人文视角审视AI发展，探讨技术与社会的关系。在技术狂欢中保持冷静思考，内容有深度有温度。",
+   monetization:[
+     {type:"B站创作激励",desc:"平台分成+充电",weight:35},
+     {type:"知识付费",desc:"AI伦理/哲学相关付费内容",weight:25},
+     {type:"播客赞助",desc:"播客节目商业赞助",weight:25},
+     {type:"出版",desc:"AI哲学相关书籍出版",weight:15}
+   ],
+   influence:{breadth:"B站+播客平台",depth:"AI人文思考领域独特声音，思想深度领先",engagement:"受众圈层小但忠诚度极高，评论质量高"},
+   videos:180,avgPlay:42,platform:"B站+播客",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:14,name:"归藏的AI工具箱",fans:68,category:"AI工具评测",avatar:"GC",color:"#55efc4",
+   tags:["AI工具","效率工具","产品评测"],
+   style:"工具评测派",styleDesc:"专注AI工具评测和推荐，覆盖设计、写作、编程等多场景。系统化的评测体系，内容实用性强。",
+   monetization:[
+     {type:"品牌合作",desc:"AI工具品牌推广合作",weight:35},
+     {type:"分销佣金",desc:"AI工具推荐CPS分销",weight:30},
+     {type:"付费社群",desc:"AI工具精选社群",weight:20},
+     {type:"平台激励",desc:"B站创作激励",weight:15}
+   ],
+   influence:{breadth:"B站+小红书+公众号",depth:"AI工具评测领域系统化程度高",engagement:"工具推荐转化率高，用户信任度强"},
+   videos:560,avgPlay:22,platform:"B站+小红书+公众号",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:15,name:"清华姜学长",fans:62,category:"AI技术科普",avatar:"JX",color:"#ff7675",
+   tags:["清华视角","AI前沿","学术解读"],
+   style:"学术解读派",styleDesc:"清华背景的AI前沿解读，将学术成果转化为大众可理解的内容。兼具学术严谨性和传播可读性。",
+   monetization:[
+     {type:"B站创作激励",desc:"平台分成+充电",weight:30},
+     {type:"企业培训",desc:"AI技术培训服务",weight:30},
+     {type:"学术合作",desc:"与高校/研究机构合作项目",weight:25},
+     {type:"品牌合作",desc:"科技品牌内容合作",weight:15}
+   ],
+   influence:{breadth:"B站+公众号",depth:"清华背书，学术可信度极高",engagement:"学术内容受众粘性强，完播率高"},
+   videos:195,avgPlay:48,platform:"B站+公众号",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:16,name:"Xuan酱",fans:58,category:"AI教程",avatar:"XJ",color:"#fab1a0",
+   tags:["AI绘画","Stable Diffusion","ComfyUI"],
+   style:"AI绘画教学派",styleDesc:"专注AI绘画教程，从SD到ComfyUI全链路教学。教程体系完整，从基础操作到高级工作流搭建。",
+   monetization:[
+     {type:"付费课程",desc:"AI绘画系统课程，单价199-599元",weight:40},
+     {type:"模型销售",desc:"自训练AI模型/LoRA销售",weight:25},
+     {type:"品牌合作",desc:"GPU/绘图板等硬件品牌合作",weight:20},
+     {type:"平台激励",desc:"B站创作激励",weight:15}
+   ],
+   influence:{breadth:"B站+小红书",depth:"AI绘画教程领域头部，教程体系完整",engagement:"学员作品互动活跃，社区氛围好"},
+   videos:380,avgPlay:32,platform:"B站+小红书",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:17,name:"小互AI",fans:52,category:"AI科技资讯",avatar:"XH2",color:"#81ecec",
+   tags:["AI新闻","产品速递","行业动态"],
+   style:"资讯速递派",styleDesc:"高频更新的AI资讯账号，快速追踪全球AI产品和技术动态。信息密度高，更新速度快。",
+   monetization:[
+     {type:"信息流广告",desc:"内容中植入AI产品广告",weight:35},
+     {type:"品牌合作",desc:"AI产品新闻稿合作",weight:30},
+     {type:"社群运营",desc:"AI资讯社群付费运营",weight:20},
+     {type:"平台激励",desc:"B站创作激励",weight:15}
+   ],
+   influence:{breadth:"B站+公众号",depth:"AI资讯追踪速度领先，信息覆盖面广",engagement:"日更频率高，用户养成浏览习惯"},
+   videos:1200,avgPlay:18,platform:"B站+公众号",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:18,name:"刘聪NLP",fans:45,category:"AI技术",avatar:"LC2",color:"#dfe6e9",
+   tags:["NLP","大模型","自然语言处理"],
+   style:"专业技术派",styleDesc:"深耕NLP领域，内容专业度高。面向有一定技术基础的AI学习者，NLP技术分享深度领先。",
+   monetization:[
+     {type:"B站创作激励",desc:"平台分成收入",weight:30},
+     {type:"学术合作",desc:"与研究机构/企业技术合作",weight:30},
+     {type:"企业咨询",desc:"NLP技术方向咨询",weight:25},
+     {type:"知识付费",desc:"NLP技术付费专栏",weight:15}
+   ],
+   influence:{breadth:"B站+知乎",depth:"NLP领域专业影响力强",engagement:"技术受众精准，讨论深度高"},
+   videos:145,avgPlay:25,platform:"B站+知乎",source:"AIGCRank 2025年度AI博主榜单"},
+  {rank:19,name:"3Blue1Brown",fans:42,category:"AI数学基础",avatar:"3B1B",color:"#ffeaa7",
+   tags:["线性代数","神经网络","数学可视化"],
+   style:"可视化教学派",styleDesc:"全球顶级数学科普频道，用动画让抽象数学变得直觉可感。神经网络、线性代数系列是理解AI数学基础的天花板。",
+   monetization:[
+     {type:"Patreon众筹",desc:"海外Patreon月度赞助，约$50K+/月",weight:40},
+     {type:"品牌合作",desc:"教育科技品牌合作",weight:25},
+     {type:"周边销售",desc:"数学主题周边产品",weight:20},
+     {type:"演讲邀约",desc:"全球学术/科技会议演讲",weight:15}
+   ],
+   influence:{breadth:"YouTube+B站全球双语",depth:"全球数学科普天花板级影响力",engagement:"中文字幕版在B站广受欢迎，弹幕密集"},
+   videos:120,avgPlay:180,platform:"B站+YouTube",source:"B站知识区综合排名"},
+  {rank:20,name:"袋鼠帝AI客栈",fans:38,category:"AI教程",avatar:"DS",color:"#fd79a8",
+   tags:["AI入门","工具教学","实操指南"],
+   style:"入门教学派",styleDesc:"面向零基础用户的AI教程，手把手教学风格亲切易懂。教程覆盖面广，从基础概念到实操应用。",
+   monetization:[
+     {type:"付费课程",desc:"AI入门系列课程",weight:35},
+     {type:"社群运营",desc:"AI学习社群",weight:30},
+     {type:"品牌合作",desc:"AI产品推广合作",weight:20},
+     {type:"平台激励",desc:"B站创作激励",weight:15}
+   ],
+   influence:{breadth:"B站+小红书",depth:"AI入门教育领域知名，零基础用户友好",engagement:"新手用户互动积极，提问活跃"},
+   videos:620,avgPlay:15,platform:"B站+小红书",source:"AIGCRank 2025年度AI博主榜单"}
+];
+
+// ═══════════════════════════════════════
+// DERIVED DATA
+// ═══════════════════════════════════════
+const STYLE_GROUPS=[
+  {name:"亲测体验派",members:["数字生命卡兹克","秋芝2046"],color:"#00d4aa",
+   desc:"以亲身使用和深度体验为核心竞争力，强调真实场景下的产品测评"},
+  {name:"学术科普派",members:["漫士沉思录","晓辉博士","清华姜学长"],color:"#ff6b6b",
+   desc:"具备专业学术背景（博士/名校），将前沿研究转化为大众可理解的科普内容"},
+  {name:"工具教程派",members:["林亦LYi","归藏的AI工具箱","袋鼠帝AI客栈"],color:"#ffd93d",
+   desc:"聚焦AI工具实操教学，更新频率高，内容实用性强，面向入门到进阶用户"},
+  {name:"行业媒体派",members:["量子位","机器之心","新智元","小互AI"],color:"#6c5ce7",
+   desc:"专业AI媒体机构，以资讯、报告和行业分析为核心，覆盖面广但深度不一"},
+  {name:"方法论派",members:["宝玉xp"],color:"#0984e3",
+   desc:"系统性方法论教学，构建完整的知识体系，强调可复用的思维框架"},
+  {name:"技术深度派",members:["灵茶山艾府","刘聪NLP"],color:"#00cec9",
+   desc:"面向技术从业者，将AI与编程/算法深度结合，内容专业门槛较高"},
+  {name:"设计创作派",members:["赛文乔伊","Xuan酱"],color:"#e84393",
+   desc:"AI+设计/艺术跨界，以视觉创作为核心，作品质量是核心竞争力"},
+  {name:"人文思辨派",members:["赛博禅心"],color:"#a29bfe",
+   desc:"从哲学和人文角度审视AI，在技术狂欢中提供批判性思考"},
+  {name:"硬件专业派",members:["老石谈芯"],color:"#fdcb6e",
+   desc:"聚焦AI芯片和半导体硬件，技术壁垒高，细分领域头部"},
+  {name:"可视化教学派",members:["3Blue1Brown"],color:"#ffeaa7",
+   desc:"全球顶级的数学可视化教学，用动画让抽象概念变得直觉可感"}
+];
+
+const MONETIZATION_TYPES={};
+BLOGGERS.forEach(b=>b.monetization.forEach(m=>{MONETIZATION_TYPES[m.type]=(MONETIZATION_TYPES[m.type]||0)+1}));
+const monetizationList=Object.entries(MONETIZATION_TYPES).sort((a,b)=>b[1]-a[1]);
+
+const INFLUENCE_METRICS={
+  breadth:{label:"平台覆盖广度",desc:"跨平台运营能力，全网分发覆盖面",top:["量子位","机器之心","新智元","宝玉xp","数字生命卡兹克"]},
+  depth:{label:"行业影响深度",desc:"在特定领域的权威性和话语权",top:["漫士沉思录","机器之心","宝玉xp","晓辉博士","老石谈芯"]},
+  engagement:{label:"用户互动质量",desc:"粉丝互动活跃度、评论质量、社区氛围",top:["数字生命卡兹克","漫士沉思录","林亦LYi","3Blue1Brown","赛文乔伊"]}
+};
+
+// ═══════════════════════════════════════
+// COMPONENTS
+// ═══════════════════════════════════════
+function SectionTitle({num,title,sub}){
+  return(
+    <div style={{marginBottom:28}}>
+      <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:6}}>
+        <span style={{fontFamily:'JetBrains Mono,monospace',fontSize:11,color:'#00d4aa',background:'#00d4aa12',padding:'2px 10px',borderRadius:4,border:'1px solid #00d4aa25'}}>{num}</span>
+        <h2 style={{fontSize:20,fontWeight:700,color:'#fff',letterSpacing:'-0.02em'}}>{title}</h2>
+      </div>
+      {sub&&<p style={{fontSize:12,color:'#555',marginLeft:52}}>{sub}</p>}
+    </div>
+  );
+}
+
+function Card({children,pad}){
+  return <div style={{background:'#111118',borderRadius:12,border:'1px solid #1a1a25',padding:pad||24,overflow:'hidden'}}>{children}</div>;
+}
+
+function Tag({text,color}){
+  return <span style={{display:'inline-block',padding:'2px 10px',borderRadius:12,fontSize:11,color:color||'#aaa',background:`${color||'#aaa'}12`,border:`1px solid ${color||'#aaa'}25`,marginRight:5,marginBottom:3}}>{text}</span>;
+}
+
+function MiniBar({label,value,max,color}){
+  return(
+    <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:5}}>
+      <span style={{width:90,fontSize:11,color:'#999',textAlign:'right',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{label}</span>
+      <div style={{flex:1,height:14,background:'rgba(255,255,255,0.03)',borderRadius:3,overflow:'hidden'}}>
+        <div style={{width:`${(value/max)*100}%`,height:'100%',background:color,borderRadius:3,opacity:0.75,transition:'width 0.8s cubic-bezier(0.16,1,0.3,1)'}}/>
+      </div>
+      <span style={{width:20,fontSize:11,color:'#888',fontFamily:'JetBrains Mono,monospace',fontWeight:600}}>{value}</span>
+    </div>
+  );
+}
+
+function BloggerDetail({b,expanded,onToggle}){
+  return(
+    <div style={{background:'#111118',borderRadius:12,border:'1px solid #1a1a25',overflow:'hidden',cursor:'pointer',transition:'border-color 0.3s',borderColor:expanded?`${b.color}40`:'#1a1a25'}} onClick={onToggle}>
+      <div style={{padding:'16px 20px',display:'flex',gap:14,alignItems:'center'}}>
+        <div style={{width:40,height:40,borderRadius:10,background:`linear-gradient(135deg,${b.color}35,${b.color}10)`,border:`1px solid ${b.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'JetBrains Mono,monospace',fontSize:11,fontWeight:600,color:b.color,flexShrink:0}}>{b.avatar}</div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:3}}>
+            <span style={{fontFamily:'JetBrains Mono,monospace',fontSize:10,color:'#444',fontWeight:600}}>#{String(b.rank).padStart(2,'0')}</span>
+            <span style={{fontSize:14,fontWeight:700,color:'#fff'}}>{b.name}</span>
+            <span style={{fontSize:10,color:b.color,background:`${b.color}12`,padding:'1px 7px',borderRadius:3}}>{b.style}</span>
+          </div>
+          <div style={{display:'flex',gap:14}}>
+            <span style={{fontSize:11,color:'#666'}}><span style={{color:'#ccc',fontWeight:600,fontFamily:'JetBrains Mono,monospace'}}>{b.fans}</span>万粉</span>
+            <span style={{fontSize:11,color:'#666'}}>均播<span style={{color:'#ccc',fontWeight:600,fontFamily:'JetBrains Mono,monospace'}}> {b.avgPlay}</span>万</span>
+          </div>
+        </div>
+        <span style={{color:'#444',fontSize:16,transition:'transform 0.3s',transform:expanded?'rotate(180deg)':'rotate(0)'}}>&#9662;</span>
+      </div>
+      {expanded&&(
+        <div style={{padding:'0 20px 18px',borderTop:'1px solid #1a1a25',paddingTop:14,animation:'fadeUp 0.3s ease'}}>
+          <p style={{fontSize:12,color:'#888',lineHeight:1.8,marginBottom:12}}>{b.styleDesc}</p>
+          <div style={{marginBottom:10}}>
+            <span style={{fontSize:10,color:'#555',display:'block',marginBottom:5}}>盈利模式</span>
+            {b.monetization.map((m,i)=>(
+              <div key={i} style={{display:'flex',alignItems:'center',gap:8,marginBottom:4,padding:'4px 8px',background:'#0d0d14',borderRadius:6}}>
+                <span style={{fontSize:11,color:'#ddd',fontWeight:500,minWidth:70}}>{m.type}</span>
+                <span style={{fontSize:10,color:'#666',flex:1}}>{m.desc}</span>
+                <span style={{fontSize:10,color:b.color,fontFamily:'JetBrains Mono,monospace'}}>{m.weight}%</span>
+              </div>
+            ))}
+          </div>
+          <div style={{display:'flex',gap:16,flexWrap:'wrap'}}>
+            <div><span style={{fontSize:10,color:'#555',display:'block',marginBottom:2}}>覆盖广度</span><span style={{fontSize:11,color:'#999'}}>{b.influence.breadth}</span></div>
+            <div><span style={{fontSize:10,color:'#555',display:'block',marginBottom:2}}>影响深度</span><span style={{fontSize:11,color:'#999'}}>{b.influence.depth}</span></div>
+            <div><span style={{fontSize:10,color:'#555',display:'block',marginBottom:2}}>互动特征</span><span style={{fontSize:11,color:'#999'}}>{b.influence.engagement}</span></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RadarPlaceholder({label,scores}){
+  const size=120;
+  const cx=size/2,cy=size/2,r=size/2-16;
+  const axes=scores.map((_,i)=>({angle:(Math.PI*2*i/scores.length)-Math.PI/2}));
+  const gridRings=[0.33,0.66,1];
+  return(
+    <div style={{textAlign:'center'}}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        {gridRings.map((ring,ri)=>(
+          <polygon key={ri} points={axes.map(a=>`${cx+r*ring*Math.cos(a.angle)},${cy+r*ring*Math.sin(a.angle)}`).join(' ')} fill="none" stroke="#1a1a25" strokeWidth="1"/>
+        ))}
+        {axes.map((a,i)=>(
+          <line key={i} x1={cx} y1={cy} x2={cx+r*Math.cos(a.angle)} y2={cy+r*Math.sin(a.angle)} stroke="#1a1a25" strokeWidth="1"/>
+        ))}
+        <polygon points={scores.map((s,i)=>`${cx+r*s*Math.cos(axes[i].angle)},${cy+r*s*Math.sin(axes[i].angle)}`).join(' ')} fill="rgba(0,212,170,0.15)" stroke="#00d4aa" strokeWidth="1.5"/>
+        {scores.map((s,i)=>(
+          <circle key={i} cx={cx+r*s*Math.cos(axes[i].angle)} cy={cy+r*s*Math.sin(axes[i].angle)} r="3" fill="#00d4aa"/>
+        ))}
+      </svg>
+      <div style={{fontSize:11,color:'#888',marginTop:4}}>{label}</div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════
+// MAIN APP
+// ═══════════════════════════════════════
+function App(){
+  const [expanded,setExpanded]=useState(null);
+  const [tab,setTab]=useState('monetization');
+
+  const totalFans=BLOGGERS.reduce((s,b)=>s+b.fans,0);
+  const navItems=[
+    {id:'monetization',label:'盈利模式'},
+    {id:'style',label:'内容风格'},
+    {id:'influence',label:'影响力'},
+    {id:'detail',label:'博主详情'},
+    {id:'source',label:'数据来源'}
+  ];
+
+  return(
+    <div style={{minHeight:'100vh'}}>
+      {/* Hero */}
+      <header style={{padding:'56px 40px 36px',background:'linear-gradient(180deg,#0d1117,#0a0a0f)',borderBottom:'1px solid #1a1a25'}}>
+        <div style={{maxWidth:1200,margin:'0 auto'}}>
+          <div style={{fontSize:10,color:'#00d4aa',fontFamily:'JetBrains Mono,monospace',letterSpacing:'0.15em',marginBottom:14,textTransform:'uppercase'}}>
+            Bilibili AI Creator Deep Analysis · Monetization & Influence
+          </div>
+          <h1 style={{fontSize:38,fontWeight:900,color:'#fff',lineHeight:1.2,letterSpacing:'-0.03em',marginBottom:10}}>
+            B站AI领域Top20博主<br/>
+            <span style={{color:'#00d4aa'}}>盈利模式与影响力</span>深度分析
+          </h1>
+          <p style={{fontSize:14,color:'#555',maxWidth:560,lineHeight:1.7}}>
+            基于AIGCRank榜单、B站公开数据及行业报告，聚焦20位头部AI博主的商业变现路径、内容风格画像和三维影响力评估。
+          </p>
+        </div>
+      </header>
+
+      {/* Nav */}
+      <nav style={{position:'sticky',top:0,zIndex:100,background:'rgba(10,10,15,0.92)',backdropFilter:'blur(12px)',borderBottom:'1px solid #1a1a25'}}>
+        <div style={{maxWidth:1200,margin:'0 auto',display:'flex',padding:'0 40px'}}>
+          {navItems.map(item=>(
+            <button key={item.id} onClick={()=>{setTab(item.id);const el=document.getElementById(item.id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}}
+              style={{padding:'12px 18px',fontSize:12,fontWeight:500,color:tab===item.id?'#00d4aa':'#555',background:'none',border:'none',borderBottom:tab===item.id?'2px solid #00d4aa':'2px solid transparent',cursor:'pointer',transition:'all 0.2s',fontFamily:'Noto Sans SC,sans-serif'}}>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      <main style={{maxWidth:1200,margin:'0 auto',padding:'36px 40px'}}>
+
+        {/* ═══ 01 盈利模式 ═══ */}
+        <section id="monetization" style={{marginBottom:56}}>
+          <SectionTitle num="01" title="盈利模式全景" subtitle="B站AI博主六大变现路径及收入结构分析"/>
+
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20,marginBottom:20}}>
+            {/* 盈利模式频次 */}
+            <Card>
+              <h3 style={{fontSize:13,fontWeight:600,color:'#ccc',marginBottom:16}}>变现方式采用频次（Top 20博主中）</h3>
+              {monetizationList.map(([name,count],i)=>{
+                const colors=['#00d4aa','#ffd93d','#ff6b6b','#6c5ce7','#0984e3','#e84393','#fdcb6e','#a29bfe','#00cec9','#e17055','#74b9ff','#55efc4'];
+                return <MiniBar key={name} label={name} value={count} max={monetizationList[0][1]} color={colors[i%colors.length]}/>;
+              })}
+              <p style={{fontSize:10,color:'#444',marginTop:12,lineHeight:1.6}}>
+                品牌商单是AI博主最主流的变现方式，16/20位博主采用。知识付费（课程+社群）紧随其后，是个人博主的核心收入来源。
+              </p>
+            </Card>
+
+            {/* 收入结构分析 */}
+            <Card>
+              <h3 style={{fontSize:13,fontWeight:600,color:'#ccc',marginBottom:16}}>六大变现路径详解</h3>
+              <div style={{display:'flex',flexDirection:'column',gap:10}}>
+                {[
+                  {name:"品牌商单（花火平台）",icon:"01",color:"#00d4aa",desc:"B站官方花火平台撮合，AI产品品牌定制视频。头部博主单条报价10-30万，中腰部1-5万。2025年Q1花火商单UP主数量同比增长16%。",
+                   data:"B站Q1广告收入19.98亿元，同比增长20%"},
+                  {name:"知识付费（课程+社群）",icon:"02",color:"#ffd93d",desc:"AI课程单价99-699元，知识星球年费62-899元。头部博主课程月销可达10万+。粥左罗AI变现圈17天279万销售额为行业标杆案例。",
+                   data:"B站知识付费年流水超50亿元"},
+                  {name:"企业服务（培训+咨询）",icon:"03",color:"#ff6b6b",desc:"面向企业的AI技术培训（日薪0.5-2万）和产品咨询（项目制5-50万）。博士/名校背景博主优势明显。",
+                   data:"企业AI培训市场需求年增长200%+"},
+                  {name:"平台激励（创作激励+充电）",icon:"04",color:"#6c5ce7",desc:"B站创作激励按播放量分成，充电计划为用户自愿付费。约150万UP主通过平台获得收入。",
+                   data:"150万UP主在B站获得收入"},
+                  {name:"分销佣金（CPS）",icon:"05",color:"#0984e3",desc:"AI工具推荐分销，佣金比例10-50%。工具评测类博主的核心收入来源之一，被动收入属性强。",
+                   data:"AI工具分销市场规模快速增长"},
+                  {name:"多元衍生（出版/周边/活动）",icon:"06",color:"#e84393",desc:"图书出版版税、主题周边销售、行业峰会演讲等。适合影响力达到一定量级的头部博主。",
+                   data:"头部博主年收入可达数百万"}
+                ].map((item,i)=>(
+                  <div key={i} style={{padding:'10px 12px',background:`${item.color}06`,borderRadius:8,borderLeft:`3px solid ${item.color}`}}>
+                    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:3}}>
+                      <span style={{fontSize:12,fontWeight:600,color:'#ddd'}}>{item.name}</span>
+                      <span style={{fontSize:9,color:item.color,fontFamily:'JetBrains Mono,monospace',background:`${item.color}12`,padding:'1px 6px',borderRadius:3}}>{item.data}</span>
+                    </div>
+                    <p style={{fontSize:11,color:'#666',lineHeight:1.6}}>{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+
+          {/* 收入分层 */}
+          <Card pad={20}>
+            <h3 style={{fontSize:13,fontWeight:600,color:'#ccc',marginBottom:16}}>博主收入层级估算</h3>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:14}}>
+              {[
+                {tier:"头部（100万+粉）",range:"年入200-1000万+",count:BLOGGERS.filter(b=>b.fans>=100).length,color:"#00d4aa",desc:"品牌商单为主，知识付费+企业服务为辅，多元变现"},
+                {tier:"中头部（50-100万粉）",range:"年入50-200万",count:BLOGGERS.filter(b=>b.fans>=50&&b.fans<100).length,color:"#ffd93d",desc:"品牌合作+付费课程双引擎，部分有企业咨询"},
+                {tier:"中腰部（30-50万粉）",range:"年入20-80万",count:BLOGGERS.filter(b=>b.fans>=30&&b.fans<50).length,color:"#ff6b6b",desc:"平台激励+品牌合作为主，知识付费起步"},
+                {tier:"成长型（30万以下）",range:"年入5-30万",count:BLOGGERS.filter(b=>b.fans<30).length,color:"#6c5ce7",desc:"平台激励为主，逐步拓展品牌合作和付费内容"}
+              ].map((t,i)=>(
+                <div key={i} style={{padding:14,background:'#0d0d14',borderRadius:8}}>
+                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6}}>
+                    <span style={{fontSize:12,fontWeight:600,color:t.color}}>{t.tier}</span>
+                    <span style={{fontSize:10,color:'#555',fontFamily:'JetBrains Mono,monospace'}}>{t.count}位</span>
+                  </div>
+                  <div style={{fontSize:14,fontWeight:700,color:'#fff',fontFamily:'JetBrains Mono,monospace',marginBottom:6}}>{t.range}</div>
+                  <p style={{fontSize:10,color:'#555',lineHeight:1.6}}>{t.desc}</p>
+                </div>
+              ))}
+            </div>
+            <p style={{fontSize:9,color:'#333',marginTop:10,textAlign:'right'}}>* 收入为基于公开数据和行业案例的综合估算，仅供参考</p>
+          </Card>
+        </section>
+
+        {/* ═══ 02 内容风格 ═══ */}
+        <section id="style" style={{marginBottom:56}}>
+          <SectionTitle num="02" title="内容风格画像" subtitle="10大风格流派及其代表博主"/>
+
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
+            {STYLE_GROUPS.map((g,i)=>(
+              <Card key={i} pad={18}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
+                  <div>
+                    <span style={{fontSize:13,fontWeight:600,color:g.color}}>{g.name}</span>
+                    <span style={{fontSize:10,color:'#444',marginLeft:8}}>{g.members.length}位</span>
+                  </div>
+                </div>
+                <p style={{fontSize:11,color:'#666',lineHeight:1.6,marginBottom:8}}>{g.desc}</p>
+                <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
+                  {g.members.map((m,mi)=>(
+                    <span key={mi} style={{fontSize:10,color:g.color,background:`${g.color}10`,padding:'2px 8px',borderRadius:4,border:`1px solid ${g.color}20`}}>{m}</span>
+                  ))}
+                </div>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══ 03 影响力 ═══ */}
+        <section id="influence" style={{marginBottom:56}}>
+          <SectionTitle num="03" title="三维影响力评估" subtitle="覆盖广度 × 影响深度 × 互动质量"/>
+
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:20,marginBottom:20}}>
+            {Object.entries(INFLUENCE_METRICS).map(([key,metric])=>(
+              <Card key={key}>
+                <h3 style={{fontSize:13,fontWeight:600,color:'#ccc',marginBottom:6}}>{metric.label}</h3>
+                <p style={{fontSize:11,color:'#555',marginBottom:14,lineHeight:1.6}}>{metric.desc}</p>
+                <div style={{fontSize:10,color:'#444',marginBottom:6}}>TOP 5 博主</div>
+                {metric.top.map((name,i)=>(
+                  <div key={i} style={{display:'flex',alignItems:'center',gap:8,marginBottom:5}}>
+                    <span style={{width:16,fontSize:10,color:'#333',fontFamily:'JetBrains Mono,monospace',textAlign:'center'}}>{i+1}</span>
+                    <div style={{flex:1,height:6,background:'rgba(255,255,255,0.03)',borderRadius:3,overflow:'hidden'}}>
+                      <div style={{width:`${100-i*15}%`,height:'100%',background:['#00d4aa','#ffd93d','#ff6b6b','#6c5ce7','#0984e3'][i],borderRadius:3,opacity:0.6}}/>
+                    </div>
+                    <span style={{fontSize:11,color:'#aaa',minWidth:90}}>{name}</span>
+                  </div>
+                ))}
+              </Card>
+            ))}
+          </div>
+
+          {/* 影响力矩阵 */}
+          <Card pad={20}>
+            <h3 style={{fontSize:13,fontWeight:600,color:'#ccc',marginBottom:16}}>影响力矩阵：广度 vs 深度</h3>
+            <div style={{position:'relative',height:320,background:'#0d0d14',borderRadius:8}}>
+              {/* Axes */}
+              <div style={{position:'absolute',bottom:30,left:60,right:20,height:1,background:'#1a1a25'}}/>
+              <div style={{position:'absolute',top:10,bottom:30,left:60,width:1,background:'#1a1a25'}}/>
+              <span style={{position:'absolute',bottom:8,left:'50%',transform:'translateX(-50%)',fontSize:10,color:'#444'}}>覆盖广度 →</span>
+              <span style={{position:'absolute',top:'50%',left:8,transform:'rotate(-90deg) translateX(-50%)',fontSize:10,color:'#444',whiteSpace:'nowrap'}}>影响深度 →</span>
+
+              {/* Quadrant labels */}
+              <span style={{position:'absolute',top:16,right:24,fontSize:9,color:'#333'}}>高广度·高深度</span>
+              <span style={{position:'absolute',top:16,left:64,fontSize:9,color:'#333'}}>低广度·高深度</span>
+              <span style={{position:'absolute',bottom:40,right:24,fontSize:9,color:'#333'}}>高广度·低深度</span>
+              <span style={{position:'absolute',bottom:40,left:64,fontSize:9,color:'#333'}}>低广度·低深度</span>
+
+              {/* Dots */}
+              {BLOGGERS.map(b=>{
+                const breadthScore=b.platform.split('+').length>=3?0.9:b.platform.split('+').length===2?0.6:0.3;
+                const depthScore=b.fans>=150?0.95:b.fans>=100?0.85:b.fans>=70?0.7:b.fans>=50?0.55:0.4;
+                const x=60+breadthScore*(1100-80);
+                const y=280-depthScore*240;
+                const size=b.fans>=100?10:b.fans>=50?8:6;
+                return(
+                  <div key={b.rank} title={`${b.name} (${b.fans}万粉)`} style={{
+                    position:'absolute',left:x,top:y,
+                    width:size,height:size,borderRadius:'50%',
+                    background:b.color,opacity:0.8,
+                    transform:'translate(-50%,-50%)',
+                    cursor:'pointer',transition:'all 0.2s',
+                  }}/>
+                );
+              })}
+            </div>
+            <div style={{display:'flex',gap:16,marginTop:10,flexWrap:'wrap'}}>
+              <span style={{fontSize:9,color:'#444'}}>圆点大小 = 粉丝量级</span>
+              <span style={{fontSize:9,color:'#444'}}>位置 = 广度×深度综合评估</span>
+              <span style={{fontSize:9,color:'#444'}}>悬停查看博主名称</span>
+            </div>
+          </Card>
+        </section>
+
+        {/* ═══ 04 博主详情 ═══ */}
+        <section id="detail" style={{marginBottom:56}}>
+          <SectionTitle num="04" title="博主完整画像" subtitle="点击展开查看盈利结构、风格描述和影响力评估"/>
+          <div style={{display:'flex',flexDirection:'column',gap:8}}>
+            {BLOGGERS.map(b=><BloggerDetail key={b.rank} b={b} expanded={expanded===b.rank} onToggle={()=>setExpanded(expanded===b.rank?null:b.rank)}/>)}
+          </div>
+        </section>
+
+        {/* ═══ 05 数据来源 ═══ */}
+        <section id="source" style={{marginBottom:40}}>
+          <SectionTitle num="05" title="数据来源与免责声明"/>
+          <Card>
+            <div style={{display:'flex',flexDirection:'column',gap:12}}>
+              {[
+                {name:"AIGCRank 2025年度AI博主榜单",url:"juejin.cn/post/7591993600390529075",type:"行业数据平台"},
+                {name:"B站2025年Q1/Q2财报",url:"toutiao.com/group/7506700035820634650",type:"官方财报"},
+                {name:"B站2025百大UP主榜单",url:"baike.com/wiki/2025年B站百大UP主",type:"官方评选"},
+                {name:"36氪/头条AI博主推荐报道",url:"toutiao.com/group/7633353017865142794",type:"媒体报道"},
+                {name:"飞书·国内优秀AI博主大盘点",url:"feishu.cn/v/wiki/Ky7xw3GyKiRSJtkKrHmcO4kGnGc",type:"社区整理"},
+                {name:"B站UP主商业变现路径分析",url:"renrendoc.com/paper/493403817",type:"行业研究"},
+                {name:"AI知识付费市场案例（粥左罗/洪灏等）",url:"toutiao.com/group/7489725375342264844",type:"市场案例"}
+              ].map((s,i)=>(
+                <div key={i} style={{padding:12,background:'#0d0d14',borderRadius:6,border:'1px solid #1a1a25'}}>
+                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:3}}>
+                    <span style={{fontSize:12,fontWeight:600,color:'#ccc'}}>{s.name}</span>
+                    <span style={{fontSize:9,color:'#00d4aa',background:'#00d4aa12',padding:'1px 6px',borderRadius:3}}>{s.type}</span>
+                  </div>
+                  <span style={{fontSize:10,color:'#333',fontFamily:'JetBrains Mono,monospace'}}>{s.url}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{marginTop:14,padding:12,background:'#ffd93d06',borderRadius:6,border:'1px solid #ffd93d15'}}>
+              <p style={{fontSize:11,color:'#666',lineHeight:1.7}}>
+                <strong style={{color:'#ffd93d'}}>免责声明：</strong>
+                本报告中粉丝数、播放量、收入估算等数据来源于公开渠道和行业报告，可能存在时效性偏差。收入数据为基于行业案例的综合估算，不代表博主实际收入。排名综合考量了AIGCRank榜单排名、B站公开数据、行业影响力和内容质量等多维度指标。数据采集时间截至2026年4月，仅供参考。
+              </p>
+            </div>
+          </Card>
+        </section>
+      </main>
+
+      <footer style={{borderTop:'1px solid #1a1a25',padding:'28px 40px',textAlign:'center'}}>
+        <p style={{fontSize:10,color:'#333',fontFamily:'JetBrains Mono,monospace'}}>B站AI领域Top20博主 · 盈利模式与影响力深度分析 · 数据截至2026年4月</p>
+      </footer>
+    </div>
+  );
+}
+
+const root=ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>
