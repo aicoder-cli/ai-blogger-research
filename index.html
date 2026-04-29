@@ -429,6 +429,16 @@ body {
   font-size: 12px;
   color: var(--text-dim);
 }
+.footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.footer-views {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+}
 
 /* ========== Iframe View ========== */
 .iframe-view {
@@ -895,7 +905,12 @@ body {
       本报告由 AI 搜集公开信息自动生成 &middot; 仅供研究参考，不构成任何建议<br>
       调研范围：2025.01 &ndash; 2026.04
     </div>
-    <div class="footer-date">2026.04</div>
+    <div class="footer-meta">
+      <span class="footer-date">2026.04</span>
+      <span class="footer-views">
+        <span id="busuanzi_container_site_pv">访问 <span id="busuanzi_value_site_pv"></span> 次</span>
+      </span>
+    </div>
   </div>
 
 </div>
@@ -1014,4 +1029,6 @@ body {
 </script>
 
 </body>
+<!-- 不蒜子访问统计 -->
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </html>
