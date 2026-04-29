@@ -43,8 +43,6 @@ ai-blogger-reports/
 │   ├── zhihu.html                          # 知乎 AI 博主报告
 │   ├── shipinhao.html                      # 视频号 AI 博主报告
 │   ├── gongzhonghao.html                   # 公众号 AI 博主报告
-│   ├── bilibili-ai-top20-report.html       # B站深度分析报告
-│   └── bilibili-ai-top20-deep-analysis.html # B站补充分析
 ├── templates/                              # 调研模板
 │   └── analysis-template.md                # 博主分析模板
 └── assets/                                 # 引用资源（图片、字体等）
